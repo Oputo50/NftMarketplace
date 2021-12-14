@@ -9,7 +9,9 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 
-contract MyToken is Ownable, ERC721, ERC721Enumerable{
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+
+contract MyToken is Ownable, ERC721, ERC721Enumerable, ERC721URIStorage{
 
      using SafeMath for uint256;
 
@@ -23,39 +25,27 @@ contract MyToken is Ownable, ERC721, ERC721Enumerable{
 
     mapping (address => uint) ownerNftCount;
 
-   // mapping (address => uint256[]) nftsOwned;
+   mapping(string => uint8) hashes;
 
     uint public tokensCount;
 
     string private _currentBaseURI;
 
-    function setBaseURI(string memory baseURI) public onlyOwner {
-        _currentBaseURI = baseURI;
-    }
 
-    function _baseURI() internal view virtual override returns (string memory) {
-        return _currentBaseURI;
-    }
-
-    function mint(string memory text) external {
+    function mint(string memory hash, string memory metadata) external {
+        require(hashes[hash] != 1);
 
         uint256 tokenId = tokensCount++;
 
+        hashes[hash] = 1;
+
         ownerNftCount[msg.sender] = ownerNftCount[msg.sender].add(1);
 
-        id_to_text[tokenId] = Metadata(text);
-        
-        //increases array length
-       // nftsOwned[msg.sender].length.add(1);
+        id_to_text[tokenId] = Metadata(metadata);
 
-       // uint256 arrLength = nftsOwned[msg.sender].length;
-
-        //adds token to array of tokens of curr address
-        //nftsOwned[msg.sender][arrLength - 1] = tokenId;
-
-        id_to_text[tokenId] = Metadata(text);
-        tokensCount++;
         _safeMint(msg.sender, tokenId);
+
+         _setTokenURI(tokenId,metadata);
 
     }
 
@@ -75,6 +65,15 @@ contract MyToken is Ownable, ERC721, ERC721Enumerable{
         return tokenIds; 
     }
 
+    function sendNft(address to, uint tokenId) public{
+        require(ownerOf(tokenId) == msg.sender);
+        ownerNftCount[msg.sender] = ownerNftCount[msg.sender].sub(1);
+        ownerNftCount[to] = ownerNftCount[to].add(1);
+        _beforeTokenTransfer(msg.sender, to, tokenId);
+        transferFrom(msg.sender,to,tokenId);
+
+    }
+
      function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721,ERC721Enumerable) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
@@ -82,5 +81,14 @@ contract MyToken is Ownable, ERC721, ERC721Enumerable{
     function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal virtual override(ERC721,ERC721Enumerable) {
         super._beforeTokenTransfer(from, to, tokenId);
     }
+
+     function tokenURI(uint256 tokenId) public view virtual override(ERC721,ERC721URIStorage) returns (string memory) {
+        return super.tokenURI(tokenId);
+    }
+
+      function _burn(uint256 tokenId) internal virtual override(ERC721,ERC721URIStorage) {
+          super._burn(tokenId);
+      }
+
 }
 

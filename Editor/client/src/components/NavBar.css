@@ -1,0 +1,96 @@
+.menuIcon{
+    margin-top: 15px;
+    left: 20px;
+    font-size: 2em;
+    font-weight: 800;
+    z-index: 111;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.5s;
+    -webkit-transition: all 0.25s;
+    position: absolute;
+}
+
+.menuIcon-hidden{
+    position: absolute;
+    opacity: 0;
+    transition: all 0.5s;
+    -webkit-transition: all 0.25s;
+
+}
+
+.menuIcon:hover{
+    transform: rotate(90deg);
+    color: #FF9900;
+}
+
+
+.sidebar{
+        opacity: 0;
+        right: 100%;
+        position: absolute;
+        background-color: #2F4850;
+        transition: all 0.5s;
+        -webkit-transition: all 0.5s;
+}
+
+.sidebar-active{
+    opacity: 1;
+    left: 0%;
+    position: fixed;
+    z-index: 111;
+    height: 100%;
+    background-color: #2F4850;
+    width: 250px;
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+}
+
+.sidebarList{
+    height: auto;
+    padding: 0;
+    width: 100%;
+}
+
+.sidebarList .row{
+    width: 100%;
+    height: 50px;
+    border-bottom: 1px solid black;
+    list-style-type: none;
+    margin: 0%;
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    align-items: center;
+    color: rgb(15, 13, 13);
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.sidebarList .row:hover{
+    background-color: #293846;
+    cursor: pointer;
+}
+
+
+.listIcon{
+    background-color: white;
+    margin-left: 2%;
+    border-radius: 20%;
+    display: inline-block;
+}
+
+.header{
+    float: right;
+    font-size: 20px;
+    position: relative;
+    color: white;
+    margin-right: 10px;
+}
+
+.header:hover{
+    cursor: pointer;
+}
+
+.sideBarFont{
+    color: white;
+}
