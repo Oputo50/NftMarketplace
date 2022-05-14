@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { ethers } from "ethers";
-import MyTokenContract from "C:/Users/pedro/OneDrive/Ambiente de Trabalho/NftCreator/Editor/client/src/contracts/MyToken.json";
+import MyTokenContract from "../contracts/MyToken.json"
 
 const PopUp = (props) => {
     const [open,setOpen] = useState(false);

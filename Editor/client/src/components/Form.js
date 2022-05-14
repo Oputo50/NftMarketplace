@@ -1,5 +1,5 @@
 import React, { PureComponent, useEffect, useState } from 'react';
-import MyTokenContract from "C:/Users/pedro/OneDrive/Ambiente de Trabalho/NftCreator/Editor/client/src/contracts/MyToken.json";
+import MyTokenContract from "../contracts/MyToken.json";
 import Web3 from "web3";
 import "./Form.css"
 import axios from "axios";

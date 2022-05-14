@@ -1,10 +1,7 @@
 import React, {useState, useEffect } from "react";
 import MyTokenContract from "../contracts/MyToken.json";
-import getWeb3OnLoad from "../getWeb3onLoad.js"
 import "../App.css";
-import List from "../components/List";
-import Form from "../components/Form";
-import Web3 from "web3";
+import {Contract, ethers} from "ethers";
 
 const Home = (props) => {
    
@@ -19,23 +16,21 @@ const Home = (props) => {
   
   const loadBlockchainData = async () => {
 
-    console.log("LOADING BC DATA")
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
     
-     const web3 = new Web3(window.ethereum);
-
-      var myContract = new web3.eth.Contract(MyTokenContract.abi,props.tokenAddress);
+      var myContract = new Contract(props.tokenAddress,MyTokenContract.abi,provider);
   
-      const accounts = await web3.eth.getAccounts();
+      const signer = provider.getSigner();
+
+      signer.getAddress().then(function(res){
+        setAccount(res);
+      })
   
-      const tokenIds = await myContract.methods.balanceOf(accounts[0]).call();
+      const totalTokens = await myContract.balanceOf(account);
 
-      console.log("on loading blockchain data : " + accounts[0] + tokenIds)
+      console.log("on loading blockchain data : " + account)
 
-      setAccount(accounts[0]);
-      setOwnedNfts(tokenIds);
-
-      
-   
+      setOwnedNfts(totalTokens.toNumber());
 
     };
 

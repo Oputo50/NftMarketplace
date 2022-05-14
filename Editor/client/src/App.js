@@ -3,13 +3,12 @@ import "./App.css";
 import Home from "./components/Home";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import NavBar from "./components/NavBar";
-import getWeb3OnLoad from "./getWeb3onLoad";
 import Form from "./components/Form";
 import List from "./components/List";
 
 
 const App = () => {
-  const tokenAddress = "0x92F3A9Ac177a548d155Bc09DB3B3B24C50b2cE79";
+  const tokenAddress = "0x583e4f14c76129aDA162444199740f524D85e3D0";
 
   window.ethereum.on('accountsChanged', function (accounts) {
     window.location.reload();

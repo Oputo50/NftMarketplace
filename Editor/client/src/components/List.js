@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import MyTokenContract from "C:/Users/pedro/OneDrive/Ambiente de Trabalho/NftCreator/Editor/client/src/contracts/MyToken.json";
+import MyTokenContract from "../contracts/MyToken.json";
 import {ethers} from "ethers";
 import PopUp from "./PopUp";
 
@@ -11,8 +11,7 @@ const List = (props) => {
     useEffect (() => {
 
         listNfts()
-    
-      
+
     },[])
 
 
@@ -21,28 +20,23 @@ const List = (props) => {
 
         let nftObjects = [];
 
-       
-
-        const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
 
         const signer = provider.getSigner();
 
         var myNftContract = new ethers.Contract(props.tokenAddress,MyTokenContract.abi,signer);
 
         try{
+            //fetches the ids of the owned Nfts
            await myNftContract.connect(signer).getOwnedNfts().then(function(result){
                 for(let i = 0; i < result.length; i++){
                    nftIds.push(result[i].toNumber());
                 }
             })
-
+            //builds Objects with token's metadata
           buildNftObjects(nftIds).then(function(res){
-              console.log("nfts objects: " + res);
-              nftObjects = res;
-
-              console.log("returning: " + nftObjects);
-
-             setNftData(res)
+                 nftObjects = res;
+                 setNftData(res)
           })
 
 
@@ -65,16 +59,12 @@ const List = (props) => {
 
         try {
             for(let i = 0; i <= nftIds.length; i++) {
-
+                //gets all token's URIs to append to pinata's gateway url in order to fetch the token's metadata
                 await myNftContract.connect(signer).tokenURI(nftIds[i]).then(function(result){
-                    console.log("TOKEN URI: " + result);
                     fetch("https://gateway.pinata.cloud/"+result).then(function(response){
-
-                    const nftMetadata = response.json().then(function(res){
-                        nftObjects.push(res)
-                    });
-
-                   
+                             response.json().then(function(res){
+                            nftObjects.push(res)
+                    });   
                 });
 
                 })
@@ -97,18 +87,15 @@ const List = (props) => {
                 <ul className="list-group">
                 {
                  nftData.map((nft,index)=> (
-              
-                 <li key={index} className="list-group-item list-group-item-action">
+                <li key={index} className="list-group-item list-group-item-action">
                   <div>
                   <p>{nft.name}</p>
                   <PopUp tokenAddress={props.tokenAddress}></PopUp>
                   <img src={"https://gateway.pinata.cloud/ipfs/"+nft.hash}></img>
                   </div>
-              </li>
-             
-                   ))
+               </li>
+                ))
               }
-       
              </ul> 
         </div>
  
