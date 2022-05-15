@@ -1,0 +1,21 @@
+
+.sendNft-popUp{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid;
+    padding: 10px;
+    width: 25rem;
+    height: 10rem;
+    background-color: white;
+    z-index: 2;
+    cursor: pointer;
+  }
+
+.sendNftDiv{
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+    margin-top: 10px;
+  }
