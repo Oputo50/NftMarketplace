@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import { ethers } from "ethers";
 import MyTokenContract from "../../contracts/MyToken.json"
+import Marketplace from "../../contracts/Marketplace.json";
 import './SendNft.scss';
 //#ffb6c1
 
@@ -13,7 +14,7 @@ const PopUp = (props) => {
         setToAddress(event.target.value);
     }
 
-    const sendNft = (event) => {
+    const sendNft = () => {
         const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
         const signer = provider.getSigner();
         
@@ -23,6 +24,7 @@ const PopUp = (props) => {
             console.log(res)
         })
     }
+
 
     return(
 

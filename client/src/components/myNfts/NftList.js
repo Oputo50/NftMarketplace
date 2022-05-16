@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MyTokenContract from "../../contracts/MyToken.json";
 import { ethers } from "ethers";
-import PopUp from "../popup/SendNft";
+import SendNft from "../popup/SendNft";
 
 
 const List = (props) => {
@@ -81,17 +81,18 @@ const List = (props) => {
 
 
     return (
-        <div className="App">
+        <div>
             {nftData && (
                 <div>
                     <ul className="list-group">
                         {
                             nftData.map((nft, index) => (
                                 <li key={index} className="list-group-item list-group-item-action">
-                                    <div>
+                                    <div className="nft">
                                         <p>{nft.name}</p>
-                                        <PopUp tokenAddress={props.tokenAddress}></PopUp>
+                                        <SendNft tokenAddress={props.tokenAddress}/>
                                         <img src={"https://gateway.pinata.cloud/ipfs/" + nft.hash}></img>
+                                        
                                     </div>
                                 </li>
                             ))

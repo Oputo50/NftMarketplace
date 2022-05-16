@@ -402,13 +402,13 @@
     "absolutePath": "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
     "exportedSymbols": {
       "Address": [
-        1914
+        1941
       ],
       "Context": [
-        1936
+        1963
       ],
       "ERC165": [
-        2237
+        2264
       ],
       "ERC721": [
         959
@@ -417,7 +417,7 @@
         1431
       ],
       "IERC165": [
-        2249
+        2276
       ],
       "IERC721": [
         1075
@@ -432,7 +432,7 @@
         1093
       ],
       "Strings": [
-        2213
+        2240
       ]
     },
     "id": 1432,
@@ -519,9 +519,9 @@
           959,
           1617,
           1075,
-          2237,
-          2249,
-          1936
+          2264,
+          2276,
+          1963
         ],
         "name": "ERC721Enumerable",
         "nameLocation": "347:16:5",
@@ -723,7 +723,7 @@
           {
             "baseFunctions": [
               237,
-              2248
+              2275
             ],
             "body": {
               "id": 1142,
@@ -933,7 +933,7 @@
                   "id": 1124,
                   "name": "IERC165",
                   "nodeType": "IdentifierPath",
-                  "referencedDeclaration": 2249,
+                  "referencedDeclaration": 2276,
                   "src": "1014:7:5"
                 },
                 {
@@ -4456,13 +4456,13 @@
     "absolutePath": "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol",
     "exportedSymbols": {
       "Address": [
-        1914
+        1941
       ],
       "Context": [
-        1936
+        1963
       ],
       "ERC165": [
-        2237
+        2264
       ],
       "ERC721": [
         959
@@ -4471,7 +4471,7 @@
         1431
       ],
       "IERC165": [
-        2249
+        2276
       ],
       "IERC721": [
         1075
@@ -4486,7 +4486,7 @@
         1093
       ],
       "Strings": [
-        2213
+        2240
       ]
     },
     "id": 1432,
@@ -4573,9 +4573,9 @@
           959,
           1617,
           1075,
-          2237,
-          2249,
-          1936
+          2264,
+          2276,
+          1963
         ],
         "name": "ERC721Enumerable",
         "nameLocation": "347:16:5",
@@ -4777,7 +4777,7 @@
           {
             "baseFunctions": [
               237,
-              2248
+              2275
             ],
             "body": {
               "id": 1142,
@@ -4987,7 +4987,7 @@
                   "id": 1124,
                   "name": "IERC165",
                   "nodeType": "IdentifierPath",
-                  "referencedDeclaration": 2249,
+                  "referencedDeclaration": 2276,
                   "src": "1014:7:5"
                 },
                 {
@@ -8512,7 +8512,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.4",
-  "updatedAt": "2022-05-14T18:01:28.917Z",
+  "updatedAt": "2022-05-16T15:40:33.089Z",
   "devdoc": {
     "details": "This implements an optional extension of {ERC721} defined in the EIP that adds enumerability of all the token ids in the contract as well as all token ids owned by each account.",
     "kind": "dev",

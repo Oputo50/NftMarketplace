@@ -23,12 +23,8 @@ function Form(props) {
    
 
     const mintNft = async (nftHash,metadataHash) => {
-
-        console.log("THEREALMINT");
     
         const web3 = new Web3(window.ethereum);
-
-        console.log(web3);
 
         const accounts = await web3.eth.getAccounts();
 
@@ -41,8 +37,6 @@ function Form(props) {
         }
       
         console.log("it minted")
-
-       // window.location.reload();
 
         };
 

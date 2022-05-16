@@ -346,13 +346,13 @@
     "absolutePath": "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
     "exportedSymbols": {
       "Address": [
-        1914
+        1941
       ],
       "Context": [
-        1936
+        1963
       ],
       "ERC165": [
-        2237
+        2264
       ],
       "ERC721": [
         959
@@ -361,7 +361,7 @@
         1559
       ],
       "IERC165": [
-        2249
+        2276
       ],
       "IERC721": [
         1075
@@ -373,7 +373,7 @@
         1093
       ],
       "Strings": [
-        2213
+        2240
       ]
     },
     "id": 1560,
@@ -435,9 +435,9 @@
           959,
           1617,
           1075,
-          2237,
-          2249,
-          1936
+          2264,
+          2276,
+          1963
         ],
         "name": "ERC721URIStorage",
         "nameLocation": "180:16:6",
@@ -450,7 +450,7 @@
               "id": 1438,
               "name": "Strings",
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 2213,
+              "referencedDeclaration": 2240,
               "src": "220:7:6"
             },
             "nodeType": "UsingForDirective",
@@ -1945,13 +1945,13 @@
     "absolutePath": "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol",
     "exportedSymbols": {
       "Address": [
-        1914
+        1941
       ],
       "Context": [
-        1936
+        1963
       ],
       "ERC165": [
-        2237
+        2264
       ],
       "ERC721": [
         959
@@ -1960,7 +1960,7 @@
         1559
       ],
       "IERC165": [
-        2249
+        2276
       ],
       "IERC721": [
         1075
@@ -1972,7 +1972,7 @@
         1093
       ],
       "Strings": [
-        2213
+        2240
       ]
     },
     "id": 1560,
@@ -2034,9 +2034,9 @@
           959,
           1617,
           1075,
-          2237,
-          2249,
-          1936
+          2264,
+          2276,
+          1963
         ],
         "name": "ERC721URIStorage",
         "nameLocation": "180:16:6",
@@ -2049,7 +2049,7 @@
               "id": 1438,
               "name": "Strings",
               "nodeType": "IdentifierPath",
-              "referencedDeclaration": 2213,
+              "referencedDeclaration": 2240,
               "src": "220:7:6"
             },
             "nodeType": "UsingForDirective",
@@ -3546,7 +3546,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.4",
-  "updatedAt": "2022-05-14T18:01:28.930Z",
+  "updatedAt": "2022-05-16T15:40:33.119Z",
   "devdoc": {
     "details": "ERC721 token with storage based token URI management.",
     "kind": "dev",

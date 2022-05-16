@@ -4,9 +4,10 @@ pragma solidity ^0.8.9;
 import '@openzeppelin/contracts/utils/Counters.sol';
 import '@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol';
 import '@openzeppelin/contracts/token/ERC721/ERC721.sol'; 
+import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 import '@openzeppelin/contracts/security/ReentrancyGuard.sol';
 
-contract Marketplace is ReentrancyGuard{
+contract Marketplace is ReentrancyGuard, ERC721Holder{
     using Counters for Counters.Counter;
     Counters.Counter private _itemIds;
     Counters.Counter private _itemsSold;
@@ -58,7 +59,7 @@ contract Marketplace is ReentrancyGuard{
             price
         );
 
-        IERC721(nftContract).transferFrom(msg.sender, address(this), tokenId);
+        IERC721(nftContract).safeTransferFrom(msg.sender, address(this), tokenId);
 
         emit MarketItemCreated(itemId, nftContract, tokenId, msg.sender, address(0), price);
     }
@@ -73,7 +74,7 @@ contract Marketplace is ReentrancyGuard{
         require(msg.value == price, "Please submit the asking price in order to complete the purchase");
 
         idToMarketItem[itemId].seller.transfer(msg.value);
-        IERC721(nftContract).transferFrom(address(this),msg.sender,tokenId);
+        IERC721(nftContract).safeTransferFrom(address(this),msg.sender,tokenId);
         idToMarketItem[itemId].owner = payable(msg.sender);
         _itemsSold.increment();
         payable(owner).transfer(listingPrice);
@@ -96,4 +97,6 @@ contract Marketplace is ReentrancyGuard{
         }
         return items;
     }
+
+
 }
