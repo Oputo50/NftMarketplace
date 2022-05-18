@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import MyTokenContract from "../../contracts/MyToken.json";
 import { ethers } from "ethers";
 import SendNft from "../popup/SendNft";
+import SellNft from "../popup/SellNft";
 
 
 const List = (props) => {
 
     const [nftData, setNftData] = useState();
+    const marketAddress = "0xAC29532e324c850811A70d213F9c14b321ACF0EF";
 
     useEffect(() => {
 
@@ -36,7 +38,8 @@ const List = (props) => {
             //builds Objects with token's metadata
             buildNftObjects(nftIds).then(function (res) {
                 nftObjects = res;
-                setNftData(res)
+                setNftData(res);
+                console.log(res);
             })
 
 
@@ -63,7 +66,8 @@ const List = (props) => {
                 await myNftContract.connect(signer).tokenURI(nftIds[i]).then(function (result) {
                     fetch("https://gateway.pinata.cloud/" + result).then(function (response) {
                         response.json().then(function (res) {
-                            nftObjects.push(res)
+                            nftObjects.push(res);
+                            nftObjects[i].tokenId = nftIds[i];
                         });
                     });
 
@@ -92,6 +96,7 @@ const List = (props) => {
                                         <p>{nft.name}</p>
                                         <SendNft tokenAddress={props.tokenAddress}/>
                                         <img src={"https://gateway.pinata.cloud/ipfs/" + nft.hash}></img>
+                                        <SellNft tokenAddress={props.tokenAddress} marketAddress={marketAddress} tokenId={nft.tokenId}></SellNft>
                                         
                                     </div>
                                 </li>

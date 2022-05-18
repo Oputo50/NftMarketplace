@@ -105,7 +105,7 @@ function Form(props) {
             axios.post(jsonUrl, {
                 "name": nftName,
                 "hash": hash,
-                "Created By": artistName
+                "created By": artistName
             }, {
                 headers: {
                   pinata_api_key: PinataKeys[0].apiKey, 

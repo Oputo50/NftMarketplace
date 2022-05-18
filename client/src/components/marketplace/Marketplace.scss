@@ -1,0 +1,22 @@
+
+
+.marketplace{
+    height: 100vh;
+    width: 100%;
+
+    .title{
+        display:block;
+        text-align: center;
+    }
+
+    .wrapper{
+        position: relative;
+        top: 10%;
+        width: 80%;
+        height: 100%;
+        .market-items{
+            position: relative;
+            width: 80%;
+        }
+    }
+}
