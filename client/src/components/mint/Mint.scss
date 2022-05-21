@@ -1,0 +1,117 @@
+.mint {
+
+    .title {
+        text-align: center;
+    }
+
+    .wrapper {
+
+        margin-top: 100px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .left,
+        .right {
+            flex: 0.5;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+
+
+
+            .inputBox {
+                margin-top: 5%;
+                width: 50%;
+                border: 1px solid black;
+                position: relative;
+                height: 80px;
+                border-radius: 10px;
+                background-color: #2D4263;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .inputField {
+                margin-top: 15px;
+                width: 50%;
+            }
+
+            .boldFont {
+                font-weight: bold;
+            }
+
+            .imageCtn {
+                margin-top: 5%;
+                width: 250px;
+                height: 300px;
+                background-color: currentColor;
+                padding: 20px;
+
+                h1 {
+                    color: wheat;
+                    position: relative;
+                    top: 40%;
+                }
+
+                .image {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+
+                    h1 {
+                        color: black;
+                    }
+                }
+            }
+        }
+
+    }
+
+    .button {
+        margin-top: 50px;
+        display: flex;
+        justify-content: center;
+
+
+
+        .mintBtn {
+            width: 25%;
+            background-color: #2D4263;
+            height: 40px;
+            position: relative;
+            border-radius: 20px;
+            border: solid 2px;
+            text-align: center;
+            transition: all 2s ease;
+            cursor: pointer;
+
+            span {
+                vertical-align: -webkit-baseline-middle;
+            }
+
+        }
+
+        .mintBtn-disabled {
+            width: 25%;
+            text-align: center;
+            background-color: #cccccc;
+            height: 40px;
+            position: relative;
+            border-radius: 20px;
+            border: #999999;
+            color: #3d3d3d;
+            opacity: 0.8;
+            transition: all 2s ease;
+            cursor: unset;
+
+            span {
+                vertical-align: -webkit-baseline-middle;
+            }
+        }
+    }
+
+
+}

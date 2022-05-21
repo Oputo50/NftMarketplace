@@ -1,0 +1,42 @@
+  
+    .content {
+        margin-left: 20px;
+        display: flex;
+        justify-content: center;
+        background-color: #2D4263;
+        border-radius: 10%;
+        box-shadow: 1px 1px 14px 3px #000000;
+        width: 100%;
+
+        .item{
+         
+            .nft{
+                padding: 10px 10px 10px 10px;
+                background-color: lightgray;
+
+                .nft-name{
+                    text-align: center;
+
+                    span{
+                        color: #191919;
+                    }
+                }
+
+                .nft-image{
+
+                    .image{
+                        width: 200px;
+                        height: 200px;
+                    }
+                }
+
+                .nft-actions{
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: 15px;
+                }
+            }
+
+           
+        }
+    }

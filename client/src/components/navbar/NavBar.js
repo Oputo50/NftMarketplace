@@ -23,7 +23,7 @@ function NavBar(props) {
           {SidebarData.map((obj,key)=>{
             return (
               <>
-            <Link to={obj.link}>
+              <Link to={obj.link}>
               <li key={key} className="row">
                 <div>
                   <text className="sideBarFont">{obj.title}</text>

@@ -13,7 +13,7 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
     Counters.Counter private _itemsSold;
 
     address payable owner;
-    uint256 listingPrice = 1 ether;
+    uint256 listingPrice = 0.2 ether;
 
     constructor(){
         owner = payable(msg.sender);
@@ -96,6 +96,43 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
             }
         }
         return items;
+    }
+
+    function getListedItemsBySeller() public view returns (MarketItem[] memory){
+        uint itemCount = _itemIds.current();
+        uint256 sellerItems = 0;
+        uint unsoldItemCount = itemCount - _itemsSold.current();
+        uint currIndex = 0;
+
+        for(uint i = 0; i < unsoldItemCount; i++){
+            if(idToMarketItem[i+1].seller == msg.sender){
+                sellerItems += 1;
+            }
+        }
+
+        MarketItem[] memory items = new MarketItem[](sellerItems);
+
+          for(uint i = 0; i < unsoldItemCount; i++){
+            if(idToMarketItem[i+1].seller == msg.sender){
+                uint currentId = idToMarketItem[i+1].itemId;
+                MarketItem memory currentItem = idToMarketItem[currentId];
+                items[currIndex] = currentItem;
+                currIndex += 1;
+            }
+        }
+
+      return items;
+
+    }
+
+    function cancelListing(address nftContract, uint marketItemId) public {
+        require(idToMarketItem[marketItemId].seller == msg.sender,"You must be the seller in order to cancel the listing");
+         IERC721(nftContract).safeTransferFrom(address(this),msg.sender,idToMarketItem[marketItemId].tokenId);
+         delete idToMarketItem[marketItemId];
+    }
+
+    function getListingPrice() public view returns (uint256) {
+        return listingPrice;
     }
 
 

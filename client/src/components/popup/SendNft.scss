@@ -1,5 +1,5 @@
 
-.sendNft-popUp{
+.nft-popUp{
     position: absolute;
     left: 50%;
     top: 50%;
@@ -8,12 +8,22 @@
     padding: 10px;
     width: 25rem;
     height: 10rem;
-    background-color: white;
+    background-color: #2D4263;
     z-index: 2;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+
+    .popup-content{
+      width: 75%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+    }
   }
 
-.sendNftDiv{
+.actions{
     display: flex;
     justify-content: space-between;
     flex-direction: row-reverse;

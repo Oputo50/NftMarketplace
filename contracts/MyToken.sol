@@ -2,44 +2,49 @@
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import '@openzeppelin/contracts/utils/Counters.sol';
+import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
-
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 
-contract MyToken is Ownable, ERC721, ERC721Enumerable, ERC721URIStorage{
+contract MyToken is
+    Ownable,
+    ERC721,
+    ERC721Enumerable,
+    ERC721URIStorage,
+    ERC721Holder
+{
+    using SafeMath for uint256;
+    using Counters for Counters.Counter;
+    Counters.Counter private _tokenIds;
 
-     using SafeMath for uint256;
-     using Counters for Counters.Counter;
-    Counters.Counter private _tokenIds; 
+    constructor() ERC721("Puto Token", "PTT") {}
 
-    constructor() ERC721("MyFile","FIL"){}
-
-    struct Metadata{
+    struct Metadata {
         string text;
     }
 
-    mapping (uint256 => Metadata) id_to_text;
+    mapping(uint256 => Metadata) id_to_text;
 
-    mapping (address => uint) ownerNftCount;
+    mapping(address => uint256) ownerNftCount;
 
-   mapping(string => uint8) hashes;
-
-   
+    mapping(string => uint8) hashes;
 
     string private _currentBaseURI;
 
+    event tokenMint (uint256 tokenId);
 
-    function mint(string memory hash, string memory metadata) external returns(uint tokenId) {
+    function mint(string memory hash, string memory metadata)
+        external
+        returns (uint256 tokenId)
+    {
         require(hashes[hash] != 1);
 
         _tokenIds.increment();
 
-        uint newItemId = _tokenIds.current();
+        uint256 newItemId = _tokenIds.current();
 
         hashes[hash] = 1;
 
@@ -49,56 +54,73 @@ contract MyToken is Ownable, ERC721, ERC721Enumerable, ERC721URIStorage{
 
         _safeMint(msg.sender, newItemId);
 
-         _setTokenURI(newItemId,metadata);
+        _setTokenURI(newItemId, metadata);
 
-         return newItemId;
+        emit tokenMint(newItemId);
 
+        return newItemId;
     }
 
-    function getNftText(uint _tokenId) public view returns (string memory){
+    function getNftText(uint256 _tokenId) public view returns (string memory) {
         return id_to_text[_tokenId].text;
     }
 
-    function getOwnedNfts() public view returns(uint[] memory){
-
-        uint userBalance = balanceOf(msg.sender);
-        uint[] memory tokenIds = new uint[](userBalance);
-        for(uint i = 0; i < userBalance; i++){
-          uint currTokenId = tokenOfOwnerByIndex(msg.sender,i);
-          tokenIds[i] = currTokenId;
+    function getOwnedNfts() public view returns (uint256[] memory) {
+        uint256 userBalance = balanceOf(msg.sender);
+        uint256[] memory tokenIds = new uint256[](userBalance);
+        for (uint256 i = 0; i < userBalance; i++) {
+            uint256 currTokenId = tokenOfOwnerByIndex(msg.sender, i);
+            tokenIds[i] = currTokenId;
         }
 
-        return tokenIds; 
+        return tokenIds;
     }
 
-    function getLastTokenId() public view returns(uint) {
+    function getLastTokenId() public view returns (uint256) {
         return _tokenIds.current();
     }
 
-    function sendNft(address to, uint tokenId) public{
+    function sendNft(address to, uint256 tokenId) public {
         require(ownerOf(tokenId) == msg.sender);
         ownerNftCount[msg.sender] = ownerNftCount[msg.sender].sub(1);
         ownerNftCount[to] = ownerNftCount[to].add(1);
         _beforeTokenTransfer(msg.sender, to, tokenId);
-        transferFrom(msg.sender,to,tokenId);
-
+        transferFrom(msg.sender, to, tokenId);
     }
 
-     function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721,ERC721Enumerable) returns (bool) {
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        virtual
+        override(ERC721, ERC721Enumerable)
+        returns (bool)
+    {
         return super.supportsInterface(interfaceId);
     }
 
-    function _beforeTokenTransfer(address from, address to, uint256 tokenId) internal virtual override(ERC721,ERC721Enumerable) {
+    function _beforeTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal virtual override(ERC721, ERC721Enumerable) {
         super._beforeTokenTransfer(from, to, tokenId);
     }
 
-     function tokenURI(uint256 tokenId) public view virtual override(ERC721,ERC721URIStorage) returns (string memory) {
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        virtual
+        override(ERC721, ERC721URIStorage)
+        returns (string memory)
+    {
         return super.tokenURI(tokenId);
     }
 
-      function _burn(uint256 tokenId) internal virtual override(ERC721,ERC721URIStorage) {
-          super._burn(tokenId);
-      }
-
+    function _burn(uint256 tokenId)
+        internal
+        virtual
+        override(ERC721, ERC721URIStorage)
+    {
+        super._burn(tokenId);
+    }
 }
-

@@ -9,6 +9,7 @@
     transition: all 0.5s;
     -webkit-transition: all 0.25s;
     position: absolute;
+    top: 0;
 }
 
 .menuIcon-hidden{
@@ -44,6 +45,7 @@
     width: 250px;
     transition: all 0.5s;
     -webkit-transition: all 0.5s;
+    top: 0;
 }
 
 .sidebarList{
@@ -85,6 +87,8 @@
     position: relative;
     color: white;
     margin-right: 10px;
+    width: 100%;
+    text-align-last: end;
 }
 
 .header:hover{

@@ -1,7 +1,6 @@
 
 
 .marketplace{
-    height: 100vh;
     width: 100%;
 
     .title{
@@ -9,14 +8,40 @@
         text-align: center;
     }
 
+    .searchDiv{
+        position: relative;
+        width: 300px;
+        height: 50px;
+        left: 70%;
+        background-color: #2D4263;
+        display: flex;
+
+        .left{
+            flex: 0.3;
+            font-size: 15px;
+            align-self: center;
+        }
+
+        .right{
+            flex: 0.7;
+            align-self: center;
+            input{
+                width: 100px;
+            }
+        }
+    }
+
     .wrapper{
         position: relative;
-        top: 10%;
-        width: 80%;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 40px;
         height: 100%;
         .market-items{
-            position: relative;
-            width: 80%;
+            display: flex;
+            flex-direction: row;
+            width: 30%;
         }
     }
 }

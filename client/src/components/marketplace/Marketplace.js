@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import MarketplaceContract from "../../contracts/Marketplace.json";
-import TokenContract from "../../contracts/MyToken.json";
+import ERC721Contract from "../../contracts/ERC721.json";
 import "./Marketplace.scss";
 import MarketItem from './MarketItem';
 
@@ -16,52 +16,61 @@ function Marketplace(props) {
   const signer = provider.getSigner();
 
   useEffect(() => {
-    let objectArray = [];
-
-    const fetchMarketItems = async () => {
-      const items = await marketplace.connect(signer).fetchMarketItems();
-      console.log(items);
-      let tokenContract = new ethers.Contract(props.tokenAddress, TokenContract.abi, provider);
-
-      items.forEach(async (element) => {
-        const url = await tokenContract.connect(signer).tokenURI(element.tokenId);
-
-        const response = await (await fetch("https://gateway.pinata.cloud/" + url)).json();
-
-        let resObject = {
-          name: response.name,
-          hash: response.hash,
-          createdBy: response.createdBy,
-          tokenId: element.tokenId,
-          nftContract: element.nftContract,
-          itemId: element.itemId
-        }
-
-        objectArray.push(resObject);
-      });
-
-      setMarketItems(objectArray);
-
-    }
 
     fetchMarketItems();
-    {console.log("marketItems: ", { marketItems })};
-   
+
+    { console.log("marketItems: ", { marketItems }) };
 
   }, [])
+
+  const fetchMarketItems = async () => {
+    const items = await marketplace.connect(signer).fetchMarketItems();
+    let tokenContract = new ethers.Contract(props.tokenAddress, ERC721Contract.abi, provider);
+    let tokensList = [];
+
+    tokensList = await Promise.all(items.map(async ({ tokenId, nftContract, itemId, price }) => {
+
+      const url = await tokenContract.connect(signer).tokenURI(tokenId);
+
+      price = price.toString();
+
+      const { name, hash, createdBy } = await (await fetch("https://gateway.pinata.cloud/" + url)).json();
+
+      return {
+        name,
+        hash,
+        createdBy,
+        tokenId,
+        nftContract,
+        itemId,
+        price
+      }
+
+    }));
+
+
+    setMarketItems(tokensList);
+  }
 
   return (
     <div className='marketplace'>
       <div className="title">
         <h1>Marketplace</h1>
       </div>
+      <div className="searchDiv">
+        <div className="left">
+          <span>Search</span>
+        </div>
+        <div className="right">
+          <input></input>
+        </div>
+      </div>
       <div className="wrapper">
-        {console.log("heeeh")}
         <div className="market-items">
           {
             marketItems &&
             marketItems.map((item) => {
-              return <h2>oi</h2>
+              return <MarketItem price={item.price} name={item.name} hash={item.hash} createdBy={item.createdBy} tokenId={item.tokenId}></MarketItem>
             })
           }
         </div>
