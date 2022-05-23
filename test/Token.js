@@ -62,4 +62,5 @@ contract("Token", (accounts) => {
         assert.equal(metadata,token1.metadata);
     })
 
+
 })

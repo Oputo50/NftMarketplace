@@ -3,7 +3,8 @@ import MyTokenContract from "../../contracts/MyToken.json";
 import { Contract, ethers } from "ethers";
 import './Home.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShop, faWallet } from "@fortawesome/free-solid-svg-icons";
+import { faShop, faWallet, faHammer } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 const Home = (props) => {
 
@@ -45,19 +46,43 @@ const Home = (props) => {
 
 
         <div className="wrapper">
-          <div className="left">
+
+          <Link to={"/marketplace"} className="tab">
+          <div className="tab-1">
+            <div className="message-1">
+              <h1>Marketplace</h1>
+            </div>
             <div className="icon">
-              <FontAwesomeIcon icon={faShop} size={"3x"}></FontAwesomeIcon>
+              <FontAwesomeIcon icon={faShop} size={"3x"} />
+            </div>
+          </div>
+          </Link>
+
+          <Link to={"/mint"} className="tab">
+                 
+          <div className="tab-2">
+            <div className="message-2">
+              <h1>Mint Your NFT</h1>
+            </div>
+            <div className="icon">
+              <FontAwesomeIcon icon={faHammer} size={"3x"} />
+            </div>
+          </div>
+
+          </Link>
+
+          <Link to={"/myNfts"} className="tab">
+          <div className="tab-3">
+            <div className="message-3">
+              <h1>Your NFTs</h1>
+            </div>
+            <div className="icon">
+              <FontAwesomeIcon icon={faWallet} size={"3x"} />
             </div>
 
           </div>
-
-          <div className="right">
-            <div className="icon">
-              <FontAwesomeIcon icon={faWallet} size={"3x"}></FontAwesomeIcon>
-            </div>
-
-          </div>
+          </Link>
+ 
         </div>
       </div>
 

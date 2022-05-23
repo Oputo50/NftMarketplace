@@ -21,7 +21,7 @@ contract("Marketplace", (accounts) => {
 
         await tokenInstance.approve(marketAddress, 1, { from: minter });
 
-        const result = await marketInstance.createMarketItem(tokenAddress, 1, 200, { from: minter, value: 1000000000000000000, gas: 2000000 });
+        const result = await marketInstance.createMarketItem(tokenAddress, 1, 200, { from: minter, value: web3.utils.toWei("0.2"), gas: 2000000 });
 
         assert.equal(result.receipt.status, true);
 
@@ -34,6 +34,17 @@ contract("Marketplace", (accounts) => {
         const marketItems = await marketInstance.fetchMarketItems.call({from:minter});
 
         assert.equal(marketItems.length > 0, true);
+    })
+
+    it("should cancel a nft listing", async () => {
+        const marketInstance = await Marketplace.deployed();
+        const tokenInstance = await Token.deployed();
+
+        await marketInstance.cancelListing(tokenInstance.address,1,{from: minter});
+
+        const marketItems = await marketInstance.fetchMarketItems.call({from:minter});
+
+        assert.equal(marketItems.length === 1, true);
     })
 
 

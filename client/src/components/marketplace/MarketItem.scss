@@ -6,7 +6,7 @@
         background-color: #2D4263;
         border-radius: 10%;
         box-shadow: 1px 1px 14px 3px #000000;
-        width: 100%;
+        width: 400px;
 
         .item{
          
@@ -34,6 +34,21 @@
                     display: flex;
                     justify-content: space-between;
                     margin-top: 15px;
+
+                    button{
+                        background-color: #7393B3;
+                        border-radius: 10px;
+                        transition: all 1s ease;
+                        width: fit-content;
+                      }
+
+                    .price{
+                        color: black;
+
+                        .icon{
+                            margin-left: 5px;
+                        }
+                    }
                 }
             }
 

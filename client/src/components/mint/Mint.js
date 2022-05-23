@@ -3,7 +3,7 @@ import MyTokenContract from "../../contracts/MyToken.json";
 import "./Mint.scss"
 import axios from "axios";
 import { PinataKeys } from "../../utils/PinataKeys";
-import { ethers } from 'ethers';
+import { ethers, utils } from 'ethers';
 import { showErrorMessage, showSuccessMessage } from '../../utils/TriggerSnackbar';
 
 
@@ -27,16 +27,19 @@ function Mint(props) {
 
     useEffect(() => {
 
-        console.log("hey");
     }, [uploadedFile, imageUrl,canMint])
 
-    myContract.on("TokenMint",(tokenId) => {
-        showSuccessMessage("NFT successfully minted!")
-    })
+    useEffect(() => {
+        checkCanMint();
+    },[artistName,imageUrl,nftName])
+
 
     const mintNft = async (nftHash, metadataHash) => {
 
         try {
+            myContract.on("tokenMint",(tokenId) => {
+                showSuccessMessage("Congratulations!","NFT successfully minted!")
+            })
             await myContract.connect(signer).mint(nftHash, metadataHash);
         } catch (error) {
             showErrorMessage(error);
@@ -46,12 +49,15 @@ function Mint(props) {
 
     const handleNftNameOnChange = (event) => {
         setNftName(event.target.value);
-        checkCanMint();
+        
     }
 
     const handleArtistNameOnChange = (event) => {
         setArtistName(event.target.value);
-        checkCanMint();
+    }
+
+    const placeholderOnClick = () => {
+        document.getElementById('uploadImage').click();
     }
 
     const handleSubmit = () => {
@@ -59,7 +65,7 @@ function Mint(props) {
         try {
             pinFileToIPFS(uploadedFile);
         } catch (error) {
-            showErrorMessage(error);
+            showErrorMessage("Something went wrong!",error.message);
         }
 
     }
@@ -89,8 +95,6 @@ function Mint(props) {
         }
 
         reader.readAsDataURL(file);
-
-        checkCanMint();
 
     }
 
@@ -151,10 +155,10 @@ function Mint(props) {
                         <label className="boldFont">Type your NFT name</label>
                         <input type="text" onKeyUp={handleNftNameOnChange} className="inputField"></input>
                     </div>
-                    <div className="inputBox">
-                        <label className="boldFont">Upload your NFT image</label>
-                        <input type="file" onChange={fileOnChange} className="inputField"></input>
-                    </div>
+            
+                    
+                    <input id='uploadImage' type="file" onChange={fileOnChange} className="inputField imageInput"></input>
+                    
                     <div className="inputBox">
                         <label className="boldFont">Artist Name</label>
                         <input type="text" onKeyUp={handleArtistNameOnChange} className="inputField"></input>
@@ -164,7 +168,7 @@ function Mint(props) {
                 <div className="right">
                     <div className="imageCtn">
                         {imageUrl && <img src={imageUrl} className="image"></img>}
-                        {imageUrl === '' && <div className="image"><h1>Please upload an image</h1></div> }
+                        {imageUrl === '' && <div className="image" onClick={placeholderOnClick}><h1>Please upload an image</h1></div> }
                     </div>
                 </div>
             </div>

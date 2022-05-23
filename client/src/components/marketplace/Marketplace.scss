@@ -15,6 +15,7 @@
         left: 70%;
         background-color: #2D4263;
         display: flex;
+        border-radius: 10px;
 
         .left{
             flex: 0.3;
@@ -25,23 +26,24 @@
         .right{
             flex: 0.7;
             align-self: center;
-            input{
-                width: 100px;
-            }
         }
     }
 
     .wrapper{
         position: relative;
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         flex-wrap: wrap;
         margin-top: 40px;
         height: 100%;
+        width: 100%;
+        padding-left: 40px;
+        padding-right: 40px;
+        
         .market-items{
             display: flex;
             flex-direction: row;
-            width: 30%;
+            width: 100%;
         }
     }
 }

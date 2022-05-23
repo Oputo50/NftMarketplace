@@ -26,7 +26,6 @@ const OwnedNfts = (props) => {
 
 
     useEffect(() => {
-        console.log(props.tokenAddress)
         fetchOwnedNfts();
         fetchListedItems();
     }, [])
@@ -53,7 +52,7 @@ const OwnedNfts = (props) => {
             }
 
         }));
-        console.log(1, tokensList)
+    
         setNftData(tokensList);
     }
 
@@ -78,7 +77,7 @@ const OwnedNfts = (props) => {
             }
 
         }));
-        console.log(2, listedNfts)
+    
         setListedItems(listedNfts);
     }
 

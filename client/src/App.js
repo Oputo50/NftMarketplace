@@ -27,16 +27,23 @@ const App = () => {
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    if (window.ethereum === undefined) {
-      setIsConnected(false)
-    } else {
-      setIsConnected(true);
-      marketplaceContract.connect(signer).getListingPrice().then((price) => {
-        price = ethers.utils.formatEther(price.toString());
-        setListingPrice(price);
-        console.log(price);
-      })
-    }
+    provider.listAccounts().then((accounts) => {
+      console.log(accounts);
+
+      if (accounts.length == 0) {
+        setIsConnected(false)
+      } else {
+        setIsConnected(true);
+        marketplaceContract.connect(signer).getListingPrice().then((price) => {
+          price = ethers.utils.formatEther(price.toString());
+          setListingPrice(price);
+          console.log(price);
+        })
+      }
+
+    })
+    
+    
   }, [])
 
   try {
@@ -64,7 +71,11 @@ const App = () => {
             </Routes>
           </Router>
         </div>
-
+      }
+      {
+        !isConnected && <div>
+          <h1>Please connect to a metamask wallet</h1>
+        </div>
       }
     </>
 

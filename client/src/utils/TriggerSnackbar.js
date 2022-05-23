@@ -10,7 +10,7 @@ const triggerSnackbar = (title, message, messageType) => {
     }
 
     ReactDOM.render(
-        <Snackbar messageType={messageType} timer={4000} title={title} message={message} />,
+        <Snackbar messageType={messageType} timer={5000} title={title} message={message} />,
         document.getElementById('snackbar-fixed-container')
     );
 }

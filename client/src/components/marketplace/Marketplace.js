@@ -7,7 +7,11 @@ import MarketItem from './MarketItem';
 
 function Marketplace(props) {
 
-  const [marketItems, setMarketItems] = useState();
+  const [marketItems, setMarketItems] = useState([]);
+
+  const [filteredList, setFilteredList] = useState([]);
+
+  const [search, setSearch] = useState("");
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
 
@@ -19,9 +23,19 @@ function Marketplace(props) {
 
     fetchMarketItems();
 
-    { console.log("marketItems: ", { marketItems }) };
-
   }, [])
+
+  useEffect(() => {
+    if(marketItems.length !== 0){
+    const filteredList = marketItems.filter((item) => {
+      let all_str = `${item.tokenId} ${item.name}`.toLowerCase();
+   
+      return all_str.indexOf(search) > -1 
+    });
+    setFilteredList(filteredList);
+  }
+
+  }, [search,marketItems])
 
   const fetchMarketItems = async () => {
     const items = await marketplace.connect(signer).fetchMarketItems();
@@ -31,6 +45,8 @@ function Marketplace(props) {
     tokensList = await Promise.all(items.map(async ({ tokenId, nftContract, itemId, price }) => {
 
       const url = await tokenContract.connect(signer).tokenURI(tokenId);
+
+      price = ethers.utils.formatEther(price);
 
       price = price.toString();
 
@@ -48,8 +64,12 @@ function Marketplace(props) {
 
     }));
 
-
     setMarketItems(tokensList);
+
+  }
+
+  const onKeyUpHandler = (event) => {
+    setSearch(event.target.value.toLowerCase());
   }
 
   return (
@@ -62,15 +82,15 @@ function Marketplace(props) {
           <span>Search</span>
         </div>
         <div className="right">
-          <input></input>
+          <input type="text" placeholder="Enter ID or Name" onKeyUp={(e)=>(onKeyUpHandler(e))}></input>
         </div>
       </div>
       <div className="wrapper">
         <div className="market-items">
           {
-            marketItems &&
-            marketItems.map((item) => {
-              return <MarketItem price={item.price} name={item.name} hash={item.hash} createdBy={item.createdBy} tokenId={item.tokenId}></MarketItem>
+            filteredList &&
+            filteredList.map((item) => {
+              return <MarketItem item={item} marketPlace={marketplace} key={item.itemId} tokenAddress={props.tokenAddress}></MarketItem>
             })
           }
         </div>

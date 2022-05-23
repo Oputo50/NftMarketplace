@@ -26,6 +26,7 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
         address payable seller;
         address payable owner;
         uint256 price;
+        bool isCancelled;
     }
 
     mapping(uint256 => MarketItem) private idToMarketItem;
@@ -56,7 +57,8 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
             tokenId,
             payable(msg.sender),
             payable(address(0)),
-            price
+            price,
+            false
         );
 
         IERC721(nftContract).safeTransferFrom(msg.sender, address(this), tokenId);
@@ -70,8 +72,12 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
     ) public payable nonReentrant {
         uint price = idToMarketItem[itemId].price;
         uint tokenId = idToMarketItem[itemId].tokenId;
+        bool isCancelled = idToMarketItem[itemId].isCancelled;
+        address seller = idToMarketItem[itemId].seller;
 
         require(msg.value == price, "Please submit the asking price in order to complete the purchase");
+        require(isCancelled == false, "This listing has been cancelled");
+        require(msg.sender != seller,"You cannot buy your own NFT");
 
         idToMarketItem[itemId].seller.transfer(msg.value);
         IERC721(nftContract).safeTransferFrom(address(this),msg.sender,tokenId);
@@ -128,7 +134,7 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
     function cancelListing(address nftContract, uint marketItemId) public {
         require(idToMarketItem[marketItemId].seller == msg.sender,"You must be the seller in order to cancel the listing");
          IERC721(nftContract).safeTransferFrom(address(this),msg.sender,idToMarketItem[marketItemId].tokenId);
-         delete idToMarketItem[marketItemId];
+         idToMarketItem[marketItemId].isCancelled = true;
     }
 
     function getListingPrice() public view returns (uint256) {
