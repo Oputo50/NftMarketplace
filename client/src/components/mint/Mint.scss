@@ -4,76 +4,85 @@
         text-align: center;
     }
 
-    .wrapper {
+    .main{
 
-        margin-top: 100px;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
+        background-color: #466789;
+        padding-bottom: 40px;
 
-        .left,
-        .right {
-            flex: 0.5;
+        .wrapper {
+
+            margin-top: 100px;
             display: flex;
-            justify-content: center;
-            flex-direction: column;
+            flex-direction: row;
             align-items: center;
-
-
-
-            .inputBox {
-                margin-top: 5%;
-                width: 50%;
-                border: 1px solid black;
-                position: relative;
-                height: 80px;
-                border-radius: 10px;
-                background-color: #2D4263;
+    
+            .left,
+            .right {
+                flex: 0.5;
                 display: flex;
+                justify-content: center;
                 flex-direction: column;
                 align-items: center;
-            }
-
-            .inputField {
-                margin-top: 15px;
-                width: 50%;
-            }
-
-            .imageInput {
-                display: none;
-            }
-
-            .boldFont {
-                font-weight: bold;
-            }
-
-            .imageCtn {
-                margin-top: 5%;
-                width: 250px;
-                height: 300px;
-                background-color: currentColor;
-                padding: 20px;
-
-                h1 {
-                    color: wheat;
+    
+    
+    
+                .inputBox {
+                    margin-top: 5%;
+                    width: 50%;
+                    border: 2px solid black;
                     position: relative;
-                    top: 40%;
+                    height: 80px;
+                    border-radius: 10px;
+                    background-color: #2D4263;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
                 }
-
-                .image {
-                    position: relative;
-                    width: 100%;
-                    height: 100%;
-                    cursor: pointer;
-
+    
+                .inputField {
+                    margin-top: 15px;
+                    width: 50%;
+                }
+    
+                .imageInput {
+                    display: none;
+                }
+    
+                .boldFont {
+                    font-weight: bold;
+                }
+    
+                .imageCtn {
+                    margin-top: 5%;
+                    width: 250px;
+                    height: 300px;
+                    background-color: currentColor;
+                    padding: 20px;
+                    border: 2px solid black;
+    
                     h1 {
-                        color: black;
+                        color: wheat;
+                        position: relative;
+                        top: 40%;
+                    }
+    
+                    .image {
+                        position: relative;
+                        width: 100%;
+                        height: 100%;
+                        cursor: pointer;
+    
+                        h1 {
+                            color: black;
+                        }
                     }
                 }
             }
+    
         }
-
     }
+
+   
 
     .button {
         margin-top: 50px;

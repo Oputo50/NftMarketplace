@@ -1,12 +1,11 @@
   
     .content {
-        margin-left: 20px;
         display: flex;
         justify-content: center;
         background-color: #2D4263;
         border-radius: 10%;
         box-shadow: 1px 1px 14px 3px #000000;
-        width: 400px;
+        width: 300px;
 
         .item{
          
@@ -17,7 +16,7 @@
                 .nft-name{
                     text-align: center;
 
-                    span{
+                    h4{
                         color: #191919;
                     }
                 }
@@ -27,6 +26,7 @@
                     .image{
                         width: 200px;
                         height: 200px;
+                        border: 2px solid rgba(0, 0, 0, 0.686);
                     }
                 }
 

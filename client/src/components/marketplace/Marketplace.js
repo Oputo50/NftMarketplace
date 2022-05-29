@@ -13,17 +13,20 @@ function Marketplace(props) {
 
   const [search, setSearch] = useState("");
 
+  const [triggerReload,setTriggerReload] = useState(false);
+
   const provider = new ethers.providers.Web3Provider(window.ethereum);
 
   const marketplace = new ethers.Contract(props.marketAddress, MarketplaceContract.abi, provider);
 
   const signer = provider.getSigner();
 
+
   useEffect(() => {
 
     fetchMarketItems();
 
-  }, [])
+  }, [triggerReload])
 
   useEffect(() => {
     if(marketItems.length !== 0){
@@ -42,13 +45,15 @@ function Marketplace(props) {
     let tokenContract = new ethers.Contract(props.tokenAddress, ERC721Contract.abi, provider);
     let tokensList = [];
 
-    tokensList = await Promise.all(items.map(async ({ tokenId, nftContract, itemId, price }) => {
+    tokensList = await Promise.all(items.map(async ({ tokenId, nftContract, itemId, price, seller, owner }) => {
 
       const url = await tokenContract.connect(signer).tokenURI(tokenId);
 
       price = ethers.utils.formatEther(price);
 
       price = price.toString();
+
+      console.log(owner, seller);
 
       const { name, hash, createdBy } = await (await fetch("https://gateway.pinata.cloud/" + url)).json();
 
@@ -59,7 +64,8 @@ function Marketplace(props) {
         tokenId,
         nftContract,
         itemId,
-        price
+        price,
+        seller
       }
 
     }));
@@ -90,7 +96,7 @@ function Marketplace(props) {
           {
             filteredList &&
             filteredList.map((item) => {
-              return <MarketItem item={item} marketPlace={marketplace} key={item.itemId} tokenAddress={props.tokenAddress}></MarketItem>
+              return <MarketItem item={item} marketPlace={marketplace} key={item.itemId} tokenAddress={props.tokenAddress} seller={item.seller} triggerReload={()=> setTriggerReload}></MarketItem>
             })
           }
         </div>

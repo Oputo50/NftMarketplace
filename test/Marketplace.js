@@ -19,21 +19,53 @@ contract("Marketplace", (accounts) => {
 
         await tokenInstance.mint("hash", "metadata", { from: minter });
 
+        await tokenInstance.mint("hash2", "metadata2", { from: buyer });
+
         await tokenInstance.approve(marketAddress, 1, { from: minter });
 
-        const result = await marketInstance.createMarketItem(tokenAddress, 1, 200, { from: minter, value: web3.utils.toWei("0.2"), gas: 2000000 });
+        await tokenInstance.approve(marketAddress, 2, { from: buyer });
 
-        assert.equal(result.receipt.status, true);
+        await marketInstance.createMarketItem(tokenAddress, 1, 200, { from: minter, value: web3.utils.toWei("0.2"), gas: 2000000 });
+
+        await marketInstance.createMarketItem(tokenAddress, 2, 200, { from: buyer, value: web3.utils.toWei("0.2"), gas: 2000000 });
+
+        const marketItems = await marketInstance.fetchMarketItems.call({from:minter});
+
+        assert.equal(marketItems.length > 0, true);
 
     })
 
     it("should fetch all market items", async () => {
-        const tokenInstance = await Token.deployed();
         const marketInstance = await Marketplace.deployed();
 
         const marketItems = await marketInstance.fetchMarketItems.call({from:minter});
 
         assert.equal(marketItems.length > 0, true);
+    })
+
+    it("should retrieve all market items by seller", async () => {
+        const marketInstance = await Marketplace.deployed();
+
+        const marketItems = await marketInstance.getListedItemsBySeller.call({from:minter});
+
+        assert.equal(marketItems[0].tokenId,1);
+
+    })
+
+    it("should change the price of a listed item", async () => {
+        const marketInstance = await Marketplace.deployed();
+
+        await marketInstance.changeItemPrice(1, web3.utils.toWei("1"),{from: minter});
+
+        const marketItems = await marketInstance.getListedItemsBySeller.call({from:minter});
+
+        marketItems.forEach(element => {
+            if(element.itemId === 1){
+                assert.equal(element.price,  web3.utils.toWei("1") )
+            }
+        });
+
+        
     })
 
     it("should cancel a nft listing", async () => {
@@ -44,7 +76,11 @@ contract("Marketplace", (accounts) => {
 
         const marketItems = await marketInstance.fetchMarketItems.call({from:minter});
 
-        assert.equal(marketItems.length === 1, true);
+        marketItems.forEach(element => {
+            if(element.itemId == 1){
+                assert.equal(element.isCancelled, true);
+            }
+        });
     })
 
 

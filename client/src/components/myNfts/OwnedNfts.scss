@@ -1,10 +1,35 @@
 .ownedNfts {
 
+    background-color: inherit;
+
     .title {
         width: 100%;
         display: flex;
         justify-content: center;
     }
+
+    .tabs {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+
+        .active {
+            text-decoration: underline;
+            color: wheat;
+        }
+
+        .tab {
+            cursor: pointer;
+            font-size: x-large;
+        }
+
+
+
+        :first-child {
+            margin-right: 15px;
+        }
+    }
+
 
     .wrapper {
 
@@ -13,56 +38,62 @@
         display: flex;
         justify-content: flex-start;
         flex-direction: row;
-        padding-left: 40px;
-        padding-right: 40px;
+        padding-bottom: 50px;
 
-        .content-list{
-            display: flex;
-            flex-direction: row;
+        .content-list {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            row-gap: 30px;
             width: 100%;
+            place-items: center;
 
             .content {
-                margin-left: 20px;
                 display: flex;
                 justify-content: center;
                 background-color: #2D4263;
                 border-radius: 10%;
                 box-shadow: 1px 1px 14px 3px #000000;
-                width: 400px;
-    
-                .item{
-                 
-                    .nft{
+                width: 300px;
+
+                .item {
+
+                    .nft {
                         padding: 10px 10px 10px 10px;
                         background-color: lightgray;
-    
-                        .nft-name{
+
+                        .nft-name {
                             text-align: center;
-    
-                            h2{
-                                color: #191919;
-                            }
+
+                            color: #191919;
+
                         }
-        
-                        .nft-image{
-        
-                            .image{
+
+                        .nft-image {
+
+                            .image {
                                 width: 200px;
                                 height: 200px;
+                                border: 2px solid rgba(0, 0, 0, 0.686);
                             }
                         }
-        
-                        .nft-actions{
+
+                        .nft-actions {
                             display: flex;
                             justify-content: space-between;
                             margin-top: 15px;
+                            font-size: 14px;
+
                         }
                     }
-    
-                   
+
+
                 }
             }
         }
- 
+
     }
 }
+
+button:hover{
+    background-color: #0437F2 !important;
+  }

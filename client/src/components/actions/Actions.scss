@@ -1,0 +1,15 @@
+.actions-content{
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+
+    .actions{
+        display: flex;
+        justify-content: center;
+        flex-direction: row-reverse;
+        margin-top: 20px;
+      }
+
+  }

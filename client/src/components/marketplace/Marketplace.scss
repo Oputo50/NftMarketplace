@@ -16,6 +16,7 @@
         background-color: #2D4263;
         display: flex;
         border-radius: 10px;
+        margin-top: 50px;
 
         .left{
             flex: 0.3;
@@ -41,8 +42,11 @@
         padding-right: 40px;
         
         .market-items{
-            display: flex;
-            flex-direction: row;
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            row-gap: 30px;
+            width: 100%;
+            place-items: center;
             width: 100%;
         }
     }

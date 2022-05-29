@@ -17,7 +17,7 @@ function Mint(props) {
 
     const [artistName, setArtistName] = useState("");
 
-    const [canMint,setCanMint] = useState(false);
+    const [canMint, setCanMint] = useState(false);
 
     const provider = new ethers.providers.Web3Provider(window.ethereum);
 
@@ -26,30 +26,30 @@ function Mint(props) {
     const myContract = new ethers.Contract(props.tokenAddress, MyTokenContract.abi, provider);
 
     useEffect(() => {
-
-    }, [uploadedFile, imageUrl,canMint])
-
-    useEffect(() => {
         checkCanMint();
-    },[artistName,imageUrl,nftName])
+    }, [artistName, imageUrl, nftName, canMint])
 
 
     const mintNft = async (nftHash, metadataHash) => {
 
         try {
-            myContract.on("tokenMint",(tokenId) => {
-                showSuccessMessage("Congratulations!","NFT successfully minted!")
-            })
             await myContract.connect(signer).mint(nftHash, metadataHash);
+
+            myContract.on("tokenMint", (tokenId) => {
+
+                showSuccessMessage("Congratulations!", "NFT successfully minted!");
+                reloadFields();
+            })
+
         } catch (error) {
-            showErrorMessage(error);
+            showErrorMessage(error.message);
         }
 
     };
 
     const handleNftNameOnChange = (event) => {
         setNftName(event.target.value);
-        
+
     }
 
     const handleArtistNameOnChange = (event) => {
@@ -65,19 +65,32 @@ function Mint(props) {
         try {
             pinFileToIPFS(uploadedFile);
         } catch (error) {
-            showErrorMessage("Something went wrong!",error.message);
+            showErrorMessage("Something went wrong!", error.message);
         }
 
     }
 
     const checkCanMint = () => {
-        if(nftName !== "" && artistName !== "" && imageUrl !== ""){
+        if (nftName !== "" && artistName !== "" && imageUrl !== "") {
             setCanMint(true);
-        } 
+        }
 
-        if(canMint && (nftName === '' || artistName === '' || imageUrl === '')){
+        if (canMint && (nftName === '' || artistName === '' || imageUrl === '')) {
             setCanMint(false);
         }
+    }
+
+    const reloadFields = () => {
+
+        setUploadedFile(null);
+        setNftName("");
+        setArtistName("");
+        setImageUrl("");
+
+        Array.from(document.querySelectorAll("input")).forEach(
+            input => (input.value = "")
+          );
+       
     }
 
     const fileOnChange = (event) => {
@@ -87,7 +100,7 @@ function Mint(props) {
 
         let file = event.target.files[0];
 
-        setUploadedFile(file)
+        setUploadedFile(file);
 
         reader.onloadend = () => {
             console.log("reading file");
@@ -149,33 +162,36 @@ function Mint(props) {
             <div className="title">
                 <h1>Mint Your NFT</h1>
             </div>
-            <div className="wrapper">
-                <div className="left">
-                    <div className="inputBox">
-                        <label className="boldFont">Type your NFT name</label>
-                        <input type="text" onKeyUp={handleNftNameOnChange} className="inputField"></input>
+            <div className="main">
+                <div className="wrapper">
+                    <div className="left">
+                        <div className="inputBox">
+                            <label className="boldFont">Type your NFT name</label>
+                            <input type="text" onKeyUp={handleNftNameOnChange} className="inputField"></input>
+                        </div>
+
+
+                        <input id='uploadImage' type="file" onChange={fileOnChange} className="inputField imageInput"></input>
+
+                        <div className="inputBox">
+                            <label className="boldFont">Artist Name</label>
+                            <input type="text" onKeyUp={handleArtistNameOnChange} className="inputField"></input>
+                        </div>
                     </div>
-            
-                    
-                    <input id='uploadImage' type="file" onChange={fileOnChange} className="inputField imageInput"></input>
-                    
-                    <div className="inputBox">
-                        <label className="boldFont">Artist Name</label>
-                        <input type="text" onKeyUp={handleArtistNameOnChange} className="inputField"></input>
+
+                    <div className="right">
+                        <div className="imageCtn">
+                            {imageUrl && <img src={imageUrl} className="image"></img>}
+                            {imageUrl === '' && <div className="image" onClick={placeholderOnClick}><h1>Please upload an image</h1></div>}
+                        </div>
                     </div>
                 </div>
 
-                <div className="right">
-                    <div className="imageCtn">
-                        {imageUrl && <img src={imageUrl} className="image"></img>}
-                        {imageUrl === '' && <div className="image" onClick={placeholderOnClick}><h1>Please upload an image</h1></div> }
-                    </div>
+                <div className="button">
+                    <div onClick={canMint ? handleSubmit : undefined} className={canMint ? 'mintBtn' : "mintBtn-disabled"}><span>Mint</span></div>
                 </div>
             </div>
 
-            <div className="button">
-               <div onClick={handleSubmit} className={canMint ? 'mintBtn' : "mintBtn-disabled" }><span>Mint</span></div>
-            </div>
         </div>
     )
 }

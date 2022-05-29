@@ -13,38 +13,45 @@ import { ethers } from "ethers";
 
 
 const App = () => {
-  const tokenAddress = "0x7b637b6Eb1196a4d1047223d892E7Add2C35d709";
-  const marketAddress = "0x687d7fdc486161FF340EFB2F10EDc1D7A836DcEd";
+  const tokenAddress = "0x99aDF1aCF4db350c1177435bf805a58Ed86Ae5fF";
+  const marketAddress = "0x2F6bf00D16BD7DF097e71a8111E3f918151Ce522";
 
   const [listingPrice,setListingPrice] = useState();
-
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-
-  const signer = provider.getSigner();
-
-  const marketplaceContract = new ethers.Contract(marketAddress, MarketplaceContract.abi, provider);
 
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
-    provider.listAccounts().then((accounts) => {
-      console.log(accounts);
 
-      if (accounts.length == 0) {
-        setIsConnected(false)
-      } else {
-        setIsConnected(true);
-        marketplaceContract.connect(signer).getListingPrice().then((price) => {
-          price = ethers.utils.formatEther(price.toString());
-          setListingPrice(price);
-          console.log(price);
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+      const marketplaceContract = new ethers.Contract(marketAddress, MarketplaceContract.abi, provider);
+    
+      const signer = provider.getSigner();
+    
+        provider.listAccounts().then((accounts) => {
+          console.log(accounts);
+    
+          if (accounts.length === 0) {
+            setIsConnected(false)
+          } else {
+            setIsConnected(true);
+            marketplaceContract.connect(signer).getListingPrice().then((price) => {
+              price = ethers.utils.formatEther(price.toString());
+              setListingPrice(price);
+              console.log(price);
+            })
+          }
+    
         })
-      }
+        
+    } catch (error) {
+      setIsConnected(false);
+    }
+    
 
-    })
     
-    
-  }, [])
+  }, [isConnected])
 
   try {
     window.ethereum.on('accountsChanged', function (accounts) {
@@ -74,7 +81,7 @@ const App = () => {
       }
       {
         !isConnected && <div>
-          <h1>Please connect to a metamask wallet</h1>
+          <h1 style={{'color': 'black'}}>Please connect to a metamask wallet</h1>
         </div>
       }
     </>

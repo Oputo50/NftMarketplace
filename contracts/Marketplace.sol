@@ -11,6 +11,7 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
     using Counters for Counters.Counter;
     Counters.Counter private _itemIds;
     Counters.Counter private _itemsSold;
+    Counters.Counter private _itemsCancelled;
 
     address payable owner;
     uint256 listingPrice = 0.2 ether;
@@ -88,13 +89,13 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
 
     function fetchMarketItems() public view returns (MarketItem[] memory) {
         uint itemCount = _itemIds.current();
-        uint unsoldItemCount = itemCount - _itemsSold.current();
+        uint availableItemCount = itemCount - _itemsSold.current() - _itemsCancelled.current();
         uint currIndex = 0;
 
-        MarketItem[] memory items = new MarketItem[](unsoldItemCount);
+        MarketItem[] memory items = new MarketItem[](availableItemCount);
 
         for(uint i = 0; i < itemCount; i++){
-            if(idToMarketItem[i+1].owner == address(0)){
+            if(idToMarketItem[i+1].owner == address(0) && idToMarketItem[i+1].isCancelled == false){
                 uint currentId = idToMarketItem[i+1].itemId;
                 MarketItem memory currentItem = idToMarketItem[currentId];
                 items[currIndex] = currentItem;
@@ -107,19 +108,18 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
     function getListedItemsBySeller() public view returns (MarketItem[] memory){
         uint itemCount = _itemIds.current();
         uint256 sellerItems = 0;
-        uint unsoldItemCount = itemCount - _itemsSold.current();
         uint currIndex = 0;
 
-        for(uint i = 0; i < unsoldItemCount; i++){
-            if(idToMarketItem[i+1].seller == msg.sender){
+        for(uint i = 0; i < itemCount; i++){
+            if(idToMarketItem[i+1].seller == msg.sender && idToMarketItem[i+1].owner == address(0)){
                 sellerItems += 1;
             }
         }
 
         MarketItem[] memory items = new MarketItem[](sellerItems);
 
-          for(uint i = 0; i < unsoldItemCount; i++){
-            if(idToMarketItem[i+1].seller == msg.sender){
+          for(uint i = 0; i < itemCount; i++){
+            if(idToMarketItem[i+1].seller == msg.sender && idToMarketItem[i+1].isCancelled == false && idToMarketItem[i+1].owner == address(0)){
                 uint currentId = idToMarketItem[i+1].itemId;
                 MarketItem memory currentItem = idToMarketItem[currentId];
                 items[currIndex] = currentItem;
@@ -131,10 +131,17 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
 
     }
 
-    function cancelListing(address nftContract, uint marketItemId) public {
+    function cancelListing(address nftContract, uint256 marketItemId) public {
         require(idToMarketItem[marketItemId].seller == msg.sender,"You must be the seller in order to cancel the listing");
          IERC721(nftContract).safeTransferFrom(address(this),msg.sender,idToMarketItem[marketItemId].tokenId);
          idToMarketItem[marketItemId].isCancelled = true;
+         _itemsCancelled.increment();
+    }
+
+    function changeItemPrice(uint256 marketItemId, uint256 price) public {
+        require(idToMarketItem[marketItemId].seller == msg.sender,"You must be the seller in order to cancel the listing");
+
+        idToMarketItem[marketItemId].price = price;
     }
 
     function getListingPrice() public view returns (uint256) {

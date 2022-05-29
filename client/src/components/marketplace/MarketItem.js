@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import "./MarketItem.scss";
 import { faEthereum } from '@fortawesome/free-brands-svg-icons/faEthereum';
 import { ethers } from 'ethers';
@@ -11,12 +11,25 @@ function MarketItem(props) {
 
   const signer = provider.getSigner();
 
+  const [userAccount, setUserAccount] = useState("");
+
+
+  useEffect(() => {
+    provider.listAccounts().then((accounts) => {
+      setUserAccount(accounts[0]);
+    })
+
+
+  }, [userAccount])
+
   const onBuyClick = async () => {
+    console.log(userAccount);
     try {
-      await props.marketPlace.connect(signer).sellMarketItem(props.tokenAddress,props.item.itemId,{value:ethers.utils.parseEther(props.item.price)});
-      showSuccessMessage("Comgratulations!","You have successfully bought " + props.item.name + " NFT.");
+      await props.marketPlace.connect(signer).sellMarketItem(props.tokenAddress, props.item.itemId, { value: ethers.utils.parseEther(props.item.price) });
+      showSuccessMessage("Comgratulations!", "You have successfully bought " + props.item.name + " NFT.");
+      props.triggerReload();
     } catch (error) {
-      showErrorMessage("Something went wrong!",error.message);
+      showErrorMessage("Something went wrong!", error.message);
     }
   }
 
@@ -25,16 +38,19 @@ function MarketItem(props) {
       <div className="item">
         <div className="nft">
           <div className="nft-name">
-            <span>{props.item.name + ' #' + props.item.tokenId} </span>
+            <h4>{props.item.name + ' #' + props.item.tokenId} </h4>
           </div>
           <div className="nft-image">
             <img className="image" src={"https://gateway.pinata.cloud/ipfs/" + props.item.hash}></img>
           </div>
           <div className="nft-actions">
-            <button onClick={onBuyClick}>Buy</button>
+            {
+              props.seller !== userAccount && <button onClick={onBuyClick}>Buy</button>
+            }
+
             <div className="price">
               <span>{"Price: " + props.item.price}</span>
-              <FontAwesomeIcon icon={faEthereum} className="icon"/>
+              <FontAwesomeIcon icon={faEthereum} className="icon" />
             </div>
           </div>
         </div>

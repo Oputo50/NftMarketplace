@@ -5,9 +5,8 @@
     font-weight: 800;
     z-index: 111;
     cursor: pointer;
-    text-align: center;
-    transition: all 0.5s;
-    -webkit-transition: all 0.25s;
+    transition: all 1s;
+    -webkit-transition: all 1s;
     position: absolute;
     top: 0;
 }
@@ -15,24 +14,24 @@
 .menuIcon-hidden{
     position: absolute;
     opacity: 0;
-    transition: all 0.5s;
-    -webkit-transition: all 0.25s;
-
+    transition: all 1s;
+    -webkit-transition: all 1s;
 }
 
 .menuIcon:hover{
     transform: rotate(90deg);
-    color: #FF9900;
+    color: #C84B31;
 }
 
 
 .sidebar{
-        opacity: 0;
-        right: 100%;
+        left: -500px;
         position: absolute;
         background-color: #2F4850;
-        transition: all 0.5s;
-        -webkit-transition: all 0.5s;
+        transition: all 1.5s;
+        -webkit-transition: all 1.5s;
+        height: 100%;
+        z-index: 111;
 }
 
 .sidebar-active{
@@ -43,8 +42,8 @@
     height: 100%;
     background-color: #2F4850;
     width: 250px;
-    transition: all 0.5s;
-    -webkit-transition: all 0.5s;
+    transition: all 1.5s;
+    -webkit-transition: all 1.5s;
     top: 0;
 }
 
@@ -65,7 +64,7 @@
     text-align: center;
     align-items: center;
     color: rgb(15, 13, 13);
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 20px;
 }
 
 .sidebarList .row:hover{
@@ -76,7 +75,7 @@
 
 .listIcon{
     background-color: white;
-    margin-left: 2%;
+    margin-left: 10px;
     border-radius: 20%;
     display: inline-block;
 }
