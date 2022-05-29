@@ -95,7 +95,7 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
         MarketItem[] memory items = new MarketItem[](availableItemCount);
 
         for(uint i = 0; i < itemCount; i++){
-            if(idToMarketItem[i+1].owner == address(0) && idToMarketItem[i+1].isCancelled == false){
+            if(idToMarketItem[i+1].owner == address(0)){
                 uint currentId = idToMarketItem[i+1].itemId;
                 MarketItem memory currentItem = idToMarketItem[currentId];
                 items[currIndex] = currentItem;

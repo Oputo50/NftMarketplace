@@ -13,8 +13,8 @@ import { ethers } from "ethers";
 
 
 const App = () => {
-  const tokenAddress = "0x99aDF1aCF4db350c1177435bf805a58Ed86Ae5fF";
-  const marketAddress = "0x2F6bf00D16BD7DF097e71a8111E3f918151Ce522";
+  const tokenAddress = "0xba08c3BBD56987728f453a4759b8e4cb430EcdAD";
+  const marketAddress = "0xa5927bB1f60A400B7693bf80f201B35B7a40817D";
 
   const [listingPrice,setListingPrice] = useState();
 
