@@ -4,8 +4,7 @@
   background-color: #191919;
   height: 100vh;
   position: relative;
-
-  
+  overflow: auto;
 }
 
 .App-logo {
