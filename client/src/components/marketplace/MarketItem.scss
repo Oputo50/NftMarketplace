@@ -9,11 +9,11 @@
 
         .item{
          
-            .nft{
+            .market-item{
                 padding: 10px 10px 10px 10px;
                 background-color: lightgray;
 
-                .nft-name{
+                .market-item-name{
                     text-align: center;
 
                     h4{
@@ -21,7 +21,7 @@
                     }
                 }
 
-                .nft-image{
+                .market-item-image{
 
                     .image{
                         width: 200px;
@@ -30,7 +30,7 @@
                     }
                 }
 
-                .nft-actions{
+                .market-item-actions{
                     display: flex;
                     justify-content: space-between;
                     margin-top: 15px;

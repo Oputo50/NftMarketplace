@@ -36,14 +36,14 @@ function MarketItem(props) {
   return (
     <div className="content">
       <div className="item">
-        <div className="nft">
-          <div className="nft-name">
+        <div className="market-item">
+          <div className="market-item-name">
             <h4>{props.item.name + ' #' + props.item.tokenId} </h4>
           </div>
-          <div className="nft-image">
+          <div className="market-item-image">
             <img className="image" src={"https://gateway.pinata.cloud/ipfs/" + props.item.hash}></img>
           </div>
-          <div className="nft-actions">
+          <div className="market-item-actions">
             {
               props.seller !== userAccount && <button onClick={onBuyClick}>Buy</button>
             }

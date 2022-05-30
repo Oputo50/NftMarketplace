@@ -4,6 +4,9 @@ import MarketplaceContract from "../../contracts/Marketplace.json";
 import { ethers } from "ethers";
 import "./OwnedNfts.scss";
 import { showErrorMessage, showSuccessMessage } from "../../utils/TriggerSnackbar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faEthereum } from "@fortawesome/free-brands-svg-icons/faEthereum";
 import Loader from "../loader/Loader";
 import PopUp from "../popup/PopUp";
 import ReList from "../actions/ReList";
@@ -62,7 +65,6 @@ const OwnedNfts = (props) => {
 
         tokensList = await Promise.all(items.map(async (tokenId) => {
             tokenId = tokenId.toNumber();
-            console.log(tokenId);
 
             const url = await tokenContract.connect(signer).tokenURI(tokenId);
 
@@ -86,11 +88,12 @@ const OwnedNfts = (props) => {
 
         let listedNfts = [];
 
-        listedNfts = await Promise.all(items.map(async ({ tokenId, itemId, seller, owner }) => {
+        listedNfts = await Promise.all(items.map(async ({ tokenId, itemId, seller, owner, price }) => {
             tokenId = tokenId.toNumber();
             itemId = itemId.toNumber();
+            price = ethers.utils.formatEther(price);
 
-            console.log(owner, seller,itemId, tokenId);
+            console.log(owner, seller, itemId, tokenId);
 
             const url = await tokenContract.connect(signer).tokenURI(tokenId);
 
@@ -101,7 +104,8 @@ const OwnedNfts = (props) => {
                 hash,
                 createdBy,
                 tokenId,
-                itemId
+                itemId,
+                price
             }
 
         }));
@@ -163,14 +167,23 @@ const OwnedNfts = (props) => {
                                                 <div className="nft-actions">
                                                     {
                                                         activeTab === "UI" && <>
-                                                            <PopUp buttonLabel={'Sell NFT'} content={<SellNft tokenAddress={props.tokenAddress} marketAddress={props.marketAddress} tokenId={nft.tokenId} name={nft.name} listingPrice={props.listingPrice} triggerReload={setTriggerUseEffect} />}/>
-                                                            <PopUp buttonLabel={'Send NFT'}  content={<SendNft tokenAddress={props.tokenAddress} triggerReload={setTriggerUseEffect} />}/>
+                                                            <PopUp buttonLabel={'Sell NFT'} content={<SellNft tokenAddress={props.tokenAddress} marketAddress={props.marketAddress} tokenId={nft.tokenId} name={nft.name} listingPrice={props.listingPrice} />} />
+                                                            <PopUp buttonLabel={'Send NFT'} content={<SendNft tokenAddress={props.tokenAddress} triggerReload={setTriggerUseEffect} />} />
                                                         </>
                                                     }
                                                     {
                                                         activeTab === "LI" && <>
-                                                             <PopUp buttonLabel={'Change   Price'} content={ <ReList tokenAddress={props.tokenAddress} marketAddress={props.marketAddress} name={nft.name} tokenId={nft.tokenId} itemId={nft.itemId} triggerReload={setTriggerUseEffect} />}/>  
-                                                            <button onClick={() => { cancelItem(nft.itemId) }}>Cancel <br/> Listing</button>
+                                                            <div className="edit-price">
+                                                                <div style={{'color':'black'}}>
+                                                                {"Price: " + nft.price}
+                                                                <FontAwesomeIcon className="edit-icon" icon={faEthereum}/>
+                                                                </div>
+                                                                <div >
+                                                                <PopUp buttonLabel={<FontAwesomeIcon icon={faPenToSquare} />} content={<ReList tokenAddress={props.tokenAddress} marketAddress={props.marketAddress} name={nft.name} tokenId={nft.tokenId} itemId={nft.itemId} />} />
+                                                                </div>
+                                                            </div>
+                                                           
+                                                            <button onClick={() => { cancelItem(nft.itemId) }}>Cancel Listing</button>
                                                         </>
                                                     }
 

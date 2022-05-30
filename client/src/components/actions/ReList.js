@@ -36,7 +36,7 @@ function ReList(props) {
                     <FontAwesomeIcon style={{'marginLeft':'10px'}} icon={faEthereum}/>
                 </div>
                 <div className='actions'>
-                    <button onClick={changePrice} className="btn btn-primary btn-sm">Change Price</button>
+                    <button onClick={changePrice}>Change Price</button>
                 </div>
             </div>
 

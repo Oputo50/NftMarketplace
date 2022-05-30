@@ -83,6 +83,25 @@
                             margin-top: 15px;
                             font-size: 14px;
 
+                            .edit-price{
+                                display: flex;
+                                flex-direction: column;
+                                width: 50%;
+                                gap: 10px;
+
+                                .edit-icon{
+                                    margin-left: 5px;
+                                }
+                            }
+
+                            button{
+                                background-color: #7393B3;
+                                border-radius: 10px;
+                                transition: all 1s ease;
+                                width: fit-content;
+                              }
+        
+
                         }
                     }
 

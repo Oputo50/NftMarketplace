@@ -1,4 +1,4 @@
-import React, { PureComponent, useEffect, useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import MyTokenContract from "../../contracts/MyToken.json";
 import "./Mint.scss"
 import axios from "axios";

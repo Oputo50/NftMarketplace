@@ -68,7 +68,7 @@ function SellNft(props) {
                     <FontAwesomeIcon style={{ 'marginLeft': '10px' }} icon={faEthereum} />
                 </div>
                 <div className='actions'>
-                    <button onClick={sellNft} className="btn btn-primary btn-sm">Sell</button>
+                    <button onClick={sellNft}>Sell</button>
                 </div>
             </div>
 
