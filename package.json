@@ -12,8 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@openzeppelin/contracts": "^4.3.3",
-    "chai": "^4.3.6",
-    "private-dep": "git+https://<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>:pedrocabral_pt@hotmail.com/oPuto50>/<https://github.com/Oputo50/NftMarketplace>.git"
+    "chai": "^4.3.6"
   },
   "repository": {
     "type": "git",
