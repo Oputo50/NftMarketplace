@@ -70,9 +70,12 @@ const App = () => {
    }
  }
 
- const connectOnClick = (e) => {
+ const connectOnClick = async (e) => {
    e.preventDefault();
    let accountAddress = await connectToAccount();
+   if(accountAddress !== undefined){
+     setIsConnected(true);
+   }
  }
 
 
