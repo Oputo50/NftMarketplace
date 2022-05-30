@@ -1,7 +1,7 @@
 require('dotenv').config();
 const path = require("path");
-var HDWalletProvider = require("truffle-hdwallet-provider");
-const { INFURA_API_URL, MNEMONIC } = process.env;
+var WalletProvider = require("@truffle/hdwallet-provider");
+const { INFURA_API_URL, MNEMONIC} = process.env;
 
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
@@ -14,10 +14,11 @@ module.exports = {
       network_id:"5777"
     },
     ropsten: {
+      networkCheckTimeout: 10000, 
       provider: function () {
-        return new HDWalletProvider(MNEMONIC, INFURA_API_URL);
+       return new WalletProvider(MNEMONIC,INFURA_API_URL);
       },
-      network_id: 3,
+      network_id: "3",
       gas: 4000000 
     }
   },
