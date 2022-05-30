@@ -25,7 +25,7 @@ const App = () => {
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
 
-      await connectToMetamask();
+      await connectToAccount();
 
       const marketplaceContract = new ethers.Contract(marketAddress, MarketplaceContract.abi, provider);
     
@@ -63,12 +63,18 @@ const App = () => {
     console.log(error);
   }
 
-  async function connectToMetamask(){
-    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    // Prompt user for account connections
-    await provider.send("eth_requestAccounts", []);
-    const signer = provider.getSigner();
-    console.log("Account:", await signer.getAddress());
+  async function connectToAccount(){
+   try {
+      let account = await ethereum.request({method:'eth_requestAccounts'});
+      return account;
+   } catch (error) {
+     console.log(error.message);
+   }
+ }
+
+ const connectOnClick = (e) => {
+   e.preventDefault();
+   let accountAddress = await connectToAccount();
  }
 
 
@@ -92,6 +98,7 @@ const App = () => {
       {
         !isConnected && <div>
           <h1 style={{'color': 'black'}}>Please connect to a metamask wallet</h1>
+          <button onClick={connectOnClick}>Connect</button>
         </div>
       }
     </>
