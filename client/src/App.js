@@ -23,9 +23,9 @@ const App = () => {
   useEffect(() => {
 
     try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
 
-      await provider.send("eth_requestAccounts", []);
+      await connectToMetamask();
 
       const marketplaceContract = new ethers.Contract(marketAddress, MarketplaceContract.abi, provider);
     
@@ -62,6 +62,14 @@ const App = () => {
   } catch (error) {
     console.log(error);
   }
+
+  async function connectToMetamask(){
+    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    // Prompt user for account connections
+    await provider.send("eth_requestAccounts", []);
+    const signer = provider.getSigner();
+    console.log("Account:", await signer.getAddress());
+ }
 
 
   return (
