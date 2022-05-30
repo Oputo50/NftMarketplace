@@ -72,7 +72,7 @@ const App = () => {
 
  const connectOnClick = async (e) => {
    e.preventDefault();
-   let accountAddress = await connectToAccount();
+   let accountAddress = await window.ethereum.enable();
    if(accountAddress !== undefined){
      setIsConnected(true);
    }
