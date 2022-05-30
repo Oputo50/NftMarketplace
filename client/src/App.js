@@ -63,7 +63,7 @@ const App = () => {
 
   async function connectToAccount(){
    try {
-      let account = await ethereum.request({method:'eth_requestAccounts'});
+      let account = await window.ethereum.request({method:'eth_requestAccounts'});
       return account;
    } catch (error) {
      console.log(error.message);
