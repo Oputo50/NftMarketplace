@@ -2,7 +2,7 @@
   "name": "NftMarketplace",
   "version": "1.0.0",
   "description": "",
-  "private" : true,
+  "private": true,
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,7 +12,9 @@
   "license": "ISC",
   "dependencies": {
     "@openzeppelin/contracts": "^4.3.3",
-    "chai": "^4.3.6"
+    "chai": "^4.3.6",
+    "dotenv": "^16.0.1",
+    "truffle-hdwallet-provider": "^1.0.17"
   },
   "repository": {
     "type": "git",
