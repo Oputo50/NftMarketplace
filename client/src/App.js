@@ -97,7 +97,7 @@ const App = () => {
       }
       {
         !isConnected && <div>
-          <h1 style={{'color': 'black'}}>Please connect to a metamask wallet</h1>
+          <h1 style={{'color': 'black'}}>Pleaseeeeeee connect to a metamask wallet</h1>
           <button onClick={() => { connectOnClick() }}>Connect</button>
         </div>
       }
