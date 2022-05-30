@@ -24,9 +24,7 @@ const App = () => {
 
     try {
       const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-
       const marketplaceContract = new ethers.Contract(marketAddress, MarketplaceContract.abi, provider);
-    
       const signer = provider.getSigner();
     
         provider.listAccounts().then((accounts) => {
