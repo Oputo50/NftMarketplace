@@ -61,14 +61,7 @@ const App = () => {
     console.log(error);
   }
 
-  async function connectToAccount(){
-   try {
-      let account = await window.ethereum.request({method:'eth_requestAccounts'});
-      return account;
-   } catch (error) {
-     console.log(error.message);
-   }
- }
+
 
  const connectOnClick = async (e) => {
    e.preventDefault();
