@@ -20,7 +20,7 @@ function MarketItem(props) {
     })
 
 
-  }, [userAccount])
+  }, [userAccount,provider])
 
   const onBuyClick = async () => {
     console.log(userAccount);
@@ -38,10 +38,10 @@ function MarketItem(props) {
       <div className="item">
         <div className="market-item">
           <div className="market-item-name">
-            <h4>{props.item.name + ' #' + props.item.tokenId} </h4>
+          <span>{props.item.name}</span>
           </div>
           <div className="market-item-image">
-            <img className="image" src={"https://gateway.pinata.cloud/ipfs/" + props.item.hash}></img>
+            <img className="image" alt='NFT' src={"https://gateway.pinata.cloud/ipfs/" + props.item.hash}></img>
           </div>
           <div className="market-item-actions">
             {

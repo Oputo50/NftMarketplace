@@ -1,4 +1,6 @@
 .mint {
+    height: 100vh;
+    display: flow-root;
 
     .title {
         text-align: center;
@@ -59,7 +61,8 @@
                     background-color: currentColor;
                     padding: 20px;
                     border: 2px solid black;
-    
+                    cursor: pointer;
+
                     h1 {
                         color: wheat;
                         position: relative;
@@ -70,7 +73,6 @@
                         position: relative;
                         width: 100%;
                         height: 100%;
-                        cursor: pointer;
     
                         h1 {
                             color: black;

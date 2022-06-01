@@ -7,7 +7,7 @@
     cursor: pointer;
     transition: all 1s;
     -webkit-transition: all 1s;
-    position: absolute;
+    position: fixed;
     top: 0;
 }
 
@@ -82,7 +82,7 @@
 
 .header{
     float: right;
-    font-size: 20px;
+    font-size: 30px;
     position: relative;
     color: white;
     margin-right: 10px;

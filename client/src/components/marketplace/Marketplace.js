@@ -4,6 +4,7 @@ import MarketplaceContract from "../../contracts/Marketplace.json";
 import ERC721Contract from "../../contracts/ERC721.json";
 import "./Marketplace.scss";
 import MarketItem from './MarketItem';
+import Loader from '../loader/Loader';
 
 function Marketplace(props) {
 
@@ -15,6 +16,8 @@ function Marketplace(props) {
 
   const [triggerReload,setTriggerReload] = useState(false);
 
+  const [triggerLoader, setTriggerLoader] = useState(false);
+
   const provider = new ethers.providers.Web3Provider(window.ethereum);
 
   const marketplace = new ethers.Contract(props.marketAddress, MarketplaceContract.abi, provider);
@@ -23,10 +26,14 @@ function Marketplace(props) {
 
 
   useEffect(() => {
-
+    setTriggerLoader(true);
     fetchMarketItems();
 
   }, [triggerReload])
+
+  useEffect(() => {
+
+  }, [triggerLoader]);
 
   useEffect(() => {
     if(marketItems.length !== 0){
@@ -53,8 +60,6 @@ function Marketplace(props) {
 
       price = price.toString();
 
-      console.log(owner, seller);
-
       const { name, hash, createdBy } = await (await fetch("https://gateway.pinata.cloud/" + url)).json();
 
       return {
@@ -71,6 +76,7 @@ function Marketplace(props) {
     }));
 
     setMarketItems(tokensList);
+    setTriggerLoader(false);
 
   }
 
@@ -79,6 +85,8 @@ function Marketplace(props) {
   }
 
   return (
+    <>
+    <Loader isActive={triggerLoader} />
     <div className='marketplace'>
       <div className="title">
         <h1>Marketplace</h1>
@@ -91,7 +99,6 @@ function Marketplace(props) {
           <input type="text" placeholder="Enter ID or Name" onKeyUp={(e)=>(onKeyUpHandler(e))}></input>
         </div>
       </div>
-      <div className="wrapper">
         <div className="market-items">
           {
             filteredList &&
@@ -99,12 +106,11 @@ function Marketplace(props) {
               return <MarketItem item={item} marketPlace={marketplace} key={item.itemId} tokenAddress={props.tokenAddress} seller={item.seller} triggerReload={()=> setTriggerReload}></MarketItem>
             })
           }
-        </div>
       </div>
 
 
     </div>
-
+    </>
   )
 }
 

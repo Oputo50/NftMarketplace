@@ -3,11 +3,14 @@ import MyTokenContract from "../../contracts/MyToken.json";
 import "./Mint.scss"
 import axios from "axios";
 import { PinataKeys } from "../../utils/PinataKeys";
-import { ethers, utils } from 'ethers';
+import { ethers} from 'ethers';
 import { showErrorMessage, showSuccessMessage } from '../../utils/TriggerSnackbar';
+import Loader from '../loader/Loader';
 
 
 function Mint(props) {
+
+    const [triggerLoader, setTriggerLoader] = useState(false);
 
     const [nftName, setNftName] = useState("");
 
@@ -32,6 +35,8 @@ function Mint(props) {
 
     const mintNft = async (nftHash, metadataHash) => {
 
+        setTriggerLoader(true);
+
         try {
             await myContract.connect(signer).mint(nftHash, metadataHash);
 
@@ -39,10 +44,12 @@ function Mint(props) {
 
                 showSuccessMessage("Congratulations!", "NFT successfully minted!");
                 reloadFields();
+                setTriggerLoader(false);
             })
 
         } catch (error) {
             showErrorMessage(error.message);
+            setTriggerLoader(false);
         }
 
     };
@@ -158,6 +165,8 @@ function Mint(props) {
 
 
     return (
+        <>
+        <Loader isActive={triggerLoader} />
         <div className="mint">
             <div className="title">
                 <h1>Mint Your NFT</h1>
@@ -180,9 +189,9 @@ function Mint(props) {
                     </div>
 
                     <div className="right">
-                        <div className="imageCtn">
-                            {imageUrl && <img src={imageUrl} className="image"></img>}
-                            {imageUrl === '' && <div className="image" onClick={placeholderOnClick}><h1>Please upload an image</h1></div>}
+                        <div className="imageCtn" onClick={placeholderOnClick}>
+                            {imageUrl && <img alt='NFT'  src={imageUrl} className="image"></img>}
+                            {imageUrl === '' && <div className="image"><h1>Please upload an image</h1></div>}
                         </div>
                     </div>
                 </div>
@@ -193,6 +202,7 @@ function Mint(props) {
             </div>
 
         </div>
+        </>
     )
 }
 

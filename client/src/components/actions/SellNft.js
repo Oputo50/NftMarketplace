@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState} from 'react';
 import { ethers } from 'ethers';
 import { utils } from 'ethers';
 import MyTokenContract from "../../contracts/MyToken.json"
@@ -31,17 +31,21 @@ function SellNft(props) {
 
             showWarningMessage("", "Approving...");
 
-            await marketplaceContract.connect(signer).createMarketItem(props.tokenAddress, props.tokenId, utils.parseEther(price), overrides);
+            props.startLoader(true);
 
-            marketplaceContract.on("MarketItemCreated", ({ tokenId }) => {
-                window.location.reload();
+            try {
+                await marketplaceContract.connect(signer).createMarketItem(props.tokenAddress, props.tokenId, utils.parseEther(price), overrides);
 
-                setTimeout(() => {
-                    showSuccessMessage("Yay!", "Your NFT was successfully listed.");
-                }, 2000);
-              
+                marketplaceContract.on("MarketItemCreated", ({ tokenId }) => {
+                    props.triggerReload();
+                    props.startLoader(false);
+                    showSuccessMessage("Yay!", "You NFT was successfully listed!");
+                })
+            } catch (error) {
+                props.startLoader(false);
+            }
 
-            })
+
 
         } else {
             showErrorMessage("Oops!", "NFT price must be greater than 0 ether");
@@ -61,16 +65,16 @@ function SellNft(props) {
 
     return (
 
-            <div className="actions-content">
-                <div>
-                    <h5>{"Please enter " + props.name + " #" + props.tokenId + "'s price"}</h5>
-                    <input onChange={handlePriceChange} className="mt-3" type="number" step="0.01" min="0"></input>
-                    <FontAwesomeIcon style={{ 'marginLeft': '10px' }} icon={faEthereum} />
-                </div>
-                <div className='actions'>
-                    <button onClick={sellNft}>Sell</button>
-                </div>
+        <div className="actions-content">
+            <div>
+                <p>{"Please enter " + props.name + " #" + props.tokenId + "'s price"}</p>
+                <input onChange={handlePriceChange} className="mt-3" type="number" step="0.01" min="0"></input>
+                <FontAwesomeIcon style={{ 'marginLeft': '10px' }} icon={faEthereum} size={"2x"} />
             </div>
+            <div className='actions'>
+                <button className='action-btn' onClick={sellNft}>Sell</button>
+            </div>
+        </div>
 
     )
 }

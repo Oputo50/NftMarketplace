@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useState} from 'react';
 import "./Actions.scss";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons/faEthereum';
@@ -18,11 +18,18 @@ function ReList(props) {
 
     const changePrice = async () => {
       try {
-        await marketplaceContract.connect(signer).changeItemPrice(props.itemId, ethers.utils.parseEther(price));
-        props.triggerReload();
-        showSuccessMessage("Yay!","The price of your NFT have been succefully changed.");
+        props.startLoader(true);
+       let tx = await marketplaceContract.connect(signer).changeItemPrice(props.itemId, ethers.utils.parseEther(price));
+       await tx.wait();
+        marketplaceContract.on("ItemPriceChanged",() => {
+          props.startLoader(false);
+          showSuccessMessage("Yay!","The price of your NFT have been succefully changed.");
+          props.triggerReload();
+      })
+       
       } catch (error) {
-        showErrorMessage(error.message)
+        showErrorMessage(error.message);
+        props.startLoader(false);
       }
     }
 
@@ -31,12 +38,12 @@ function ReList(props) {
        
             <div className="actions-content">
                 <div>
-                <h5>{"Please enter " + props.name + " #"+ props.tokenId + "'s price"}</h5>
+                <p>{"Please enter " + props.name + " #"+ props.tokenId + "'s price"}</p>
                     <input onChange={handlePriceChange} className="mt-3" type="number" step="0.01" min="0"></input>
-                    <FontAwesomeIcon style={{'marginLeft':'10px'}} icon={faEthereum}/>
+                    <FontAwesomeIcon style={{'marginLeft':'10px'}} icon={faEthereum}  size={"2x"}/>
                 </div>
                 <div className='actions'>
-                    <button onClick={changePrice}>Change Price</button>
+                    <button className='action-btn' onClick={changePrice}>Change Price</button>
                 </div>
             </div>
 

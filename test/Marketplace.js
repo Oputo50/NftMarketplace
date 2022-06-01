@@ -74,13 +74,9 @@ contract("Marketplace", (accounts) => {
 
         await marketInstance.cancelListing(tokenInstance.address,1,{from: minter});
 
-        const marketItems = await marketInstance.fetchMarketItems.call({from:minter});
+        const sellerItems = await marketInstance.getListedItemsBySeller.call({from:minter});
 
-        marketItems.forEach(element => {
-            if(element.itemId == 1){
-                assert.equal(element.isCancelled, true);
-            }
-        });
+        assert.equal(sellerItems.length,0);
     })
 
 

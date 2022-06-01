@@ -6,6 +6,7 @@ const Token = artifacts.require("MyToken");
 
 contract("Token", (accounts) => {
     const minter = accounts[0];
+    const receiver = accounts[1];
     it("should mint a token", async () => {
         const token1 = { hash: "hash1", metadata: "metadata" }
 
@@ -62,5 +63,14 @@ contract("Token", (accounts) => {
         assert.equal(metadata,token1.metadata);
     })
 
+    it("should send a nft to a different address", async () => {
+        const contractInstance = await Token.deployed();
+
+        await contractInstance.sendNft(receiver,1);
+
+        receiverItems = await contractInstance.getOwnedNfts.call({from: receiver});
+
+        assert.equal(receiverItems[0],1);
+    })
 
 })

@@ -5,11 +5,21 @@
     justify-content: center;
     text-align: center;
 
+    p{
+        font-size: 20px;
+    }
+
+
     .actions{
         display: flex;
         justify-content: center;
         flex-direction: row-reverse;
         margin-top: 20px;
+
+        .action-btn{
+            width: 120px !important;
+            font-size: 15px;
+        }
       }
 
   }

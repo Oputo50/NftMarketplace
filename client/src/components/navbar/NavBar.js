@@ -5,7 +5,7 @@ import {SidebarData} from "./NavBarData";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 import {faTimes, faAlignJustify} from "@fortawesome/free-solid-svg-icons"
 
-function NavBar(props) {
+function NavBar() {
     const [sidebar,setSidebar] = useState(false);
 
     const showSidebar = (event) => {
@@ -22,23 +22,22 @@ function NavBar(props) {
         <ul className="sidebarList">
           {SidebarData.map((obj,key)=>{
             return (
-              <>
-              <Link to={obj.link} key={obj.link}>
-              <li key={obj.link} className="row">
-                <div>
-                  <text className="sideBarFont">{obj.title}</text>
+              
+              <Link to={obj.link} key={key}>
+              <li className="row" key={key}>
+                <div key={key}>
+                  <span className="sideBarFont">{obj.title}</span>
                 <div className="listIcon"> {obj.icon} </div>
                 </div>
               </li>
               </Link>
-              </>
             )
           })
 
           }
         </ul>
       </div>
-      <div>
+      <div style={{'textAlign':'left'}}>
         <FontAwesomeIcon onClick={showSidebar} icon={faAlignJustify} className = {sidebar ? "menuIcon-hidden" : "menuIcon"}></FontAwesomeIcon>
       </div>
       </>

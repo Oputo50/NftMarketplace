@@ -1,7 +1,9 @@
 
 
 .marketplace{
-    width: 100%;
+    height: 100vh;
+    display: flow-root;
+    overflow: auto;
 
     .title{
         display:block;
@@ -30,16 +32,6 @@
         }
     }
 
-    .wrapper{
-        position: relative;
-        display: flex;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-        margin-top: 40px;
-        height: 100%;
-        width: 100%;
-        padding-left: 40px;
-        padding-right: 40px;
         
         .market-items{
             display: grid;
@@ -47,7 +39,9 @@
             row-gap: 30px;
             width: 100%;
             place-items: center;
-            width: 100%;
+            padding-bottom: 30px;
+            height: auto;
+            margin-top: 30px;
         }
-    }
+
 }

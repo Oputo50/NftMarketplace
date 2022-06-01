@@ -14,7 +14,7 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
     Counters.Counter private _itemsCancelled;
 
     address payable owner;
-    uint256 listingPrice = 0.2 ether;
+    uint256 listingPrice = 0.001 ether;
 
     constructor(){
         owner = payable(msg.sender);
@@ -34,11 +34,17 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
 
     event MarketItemCreated (
         uint indexed itemId,
-        address indexed NftContract,
+        address indexed nftContract,
         uint256 indexed tokenId,
         address seller,
         address owner,
         uint256 price
+    );
+
+    event ItemPriceChanged (
+        address indexed nftContract,
+        uint indexed tokenId,
+        uint price
     );
 
     function createMarketItem(
@@ -95,7 +101,7 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
         MarketItem[] memory items = new MarketItem[](availableItemCount);
 
         for(uint i = 0; i < itemCount; i++){
-            if(idToMarketItem[i+1].owner == address(0)){
+            if(idToMarketItem[i+1].owner == address(0) && idToMarketItem[i+1].isCancelled == false){
                 uint currentId = idToMarketItem[i+1].itemId;
                 MarketItem memory currentItem = idToMarketItem[currentId];
                 items[currIndex] = currentItem;
@@ -111,7 +117,7 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
         uint currIndex = 0;
 
         for(uint i = 0; i < itemCount; i++){
-            if(idToMarketItem[i+1].seller == msg.sender && idToMarketItem[i+1].owner == address(0)){
+            if(idToMarketItem[i+1].seller == msg.sender && idToMarketItem[i+1].isCancelled == false && idToMarketItem[i+1].owner == address(0)){
                 sellerItems += 1;
             }
         }
@@ -140,8 +146,8 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
 
     function changeItemPrice(uint256 marketItemId, uint256 price) public {
         require(idToMarketItem[marketItemId].seller == msg.sender,"You must be the seller in order to cancel the listing");
-
         idToMarketItem[marketItemId].price = price;
+        emit ItemPriceChanged(idToMarketItem[marketItemId].nftContract, idToMarketItem[marketItemId].tokenId, price);
     }
 
     function getListingPrice() public view returns (uint256) {

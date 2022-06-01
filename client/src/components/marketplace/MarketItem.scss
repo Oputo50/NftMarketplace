@@ -15,10 +15,11 @@
 
                 .market-item-name{
                     text-align: center;
-
-                    h4{
-                        color: #191919;
-                    }
+                    font-size: 30px;
+                    color: #191919;
+                    font-weight: 450;
+                    padding-bottom: 10px;
+                    padding-top: 10px;
                 }
 
                 .market-item-image{
@@ -40,10 +41,12 @@
                         border-radius: 10px;
                         transition: all 1s ease;
                         width: fit-content;
+                        font-size: 1.25em;
                       }
 
                     .price{
                         color: black;
+                        font-size: 1.25em;
 
                         .icon{
                             margin-left: 5px;

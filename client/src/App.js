@@ -10,26 +10,41 @@ import MarketplaceContract from "./contracts/Marketplace.json";
 import AccountStatus from "./components/account/AccountStatus";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
+import { showErrorMessage } from "./utils/TriggerSnackbar";
 
 
 const App = () => {
-  const tokenAddress = "0x2996A553F2bedEce3a7009251Aacc89521b8A247";
-  const marketAddress = "0x63eD3670F09A62CBC5c7DDF98FAB09C84D4e936A";
+  const tokenAddress = "0x2d9544c343b3f32A82FBE79C45cc57Aef7345407";
+  const marketAddress = "0xA9A2E9F64A9cc67508d244548A0787207206D214";
 
-  const [listingPrice,setListingPrice] = useState();
+  const [listingPrice, setListingPrice] = useState();
 
   const [isConnected, setIsConnected] = useState(false);
 
+  const [chainId, setChainId] = useState(0);
+
+  const [isMmInstalled, setIsMmInstalled] = useState(false);
+
   useEffect(() => {
 
-    try {
-      const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-      const marketplaceContract = new ethers.Contract(marketAddress, MarketplaceContract.abi, provider);
-      const signer = provider.getSigner();
-    
+
+    if (typeof window.ethereum !== 'undefined') {
+      setIsMmInstalled(true);
+    }
+
+    if (isMmInstalled) {
+      try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+        const marketplaceContract = new ethers.Contract(marketAddress, MarketplaceContract.abi, provider);
+        const signer = provider.getSigner();
+        getCurrNetwork();
+
+        if (chainId !== 3) {
+          showErrorMessage("Wrong network", "Please make sure you are connected to Ropsten network");
+        }
+
         provider.listAccounts().then((accounts) => {
-          console.log(accounts);
-    
+
           if (accounts.length === 0) {
             setIsConnected(false)
           } else {
@@ -37,19 +52,17 @@ const App = () => {
             marketplaceContract.connect(signer).getListingPrice().then((price) => {
               price = ethers.utils.formatEther(price.toString());
               setListingPrice(price);
-              console.log(price);
             })
           }
-    
-        })
-        
-    } catch (error) {
-      setIsConnected(false);
-    }
-    
 
-    
-  }, [isConnected])
+        })
+
+      } catch (error) {
+        setIsConnected(false);
+      }
+    }
+
+  }, [isConnected, chainId,isMmInstalled])
 
   try {
     window.ethereum.on('accountsChanged', function (accounts) {
@@ -59,45 +72,42 @@ const App = () => {
     console.log(error);
   }
 
+  const getCurrNetwork = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+    let { chainId } = await provider.getNetwork();
+    setChainId(chainId);
+  }
 
 
- const connectOnClick = async () => {
-   try {
-    let accountAddress = await window.ethereum.enable();
-    console.log(accountAddress);
-    if(accountAddress !== undefined){
-      setIsConnected(true);
+  const connectOnClick = async () => {
+    try {
+      let accountAddress = await window.ethereum.enable();
+      if (accountAddress !== undefined) {
+        setIsConnected(true);
+      }
+    } catch (error) {
+      showErrorMessage("",error.message);
     }
-   } catch (error) {
-     console.log(error.message);
-   }
 
- }
+  }
 
 
   return (
     <>
-      {
-        isConnected &&
-        <div className="App">
-          <Router>
-            <NavBar />
-            <AccountStatus isConnected={isConnected} />
-            <Routes>
-              <Route exact path="/" element={<Home tokenAddress={tokenAddress} />} />
-              <Route path="/mint" element={<Mint tokenAddress={tokenAddress} />} />
-              <Route path="/myNfts" element={<OwnedNfts tokenAddress={tokenAddress} marketAddress={marketAddress} listingPrice={listingPrice}/>} />
-              <Route path="/marketplace" element={<Marketplace tokenAddress={tokenAddress} marketAddress={marketAddress} />} />
-            </Routes>
-          </Router>
-        </div>
-      }
-      {
-        !isConnected && <div>
-          <h1 style={{'color': 'black'}}>Pleaseeeeeee connect to a metamask wallet</h1>
-          <button onClick={() => { connectOnClick() }}>Connect</button>
-        </div>
-      }
+
+      <div className="App">
+        <Router>
+          {isConnected && <NavBar />}
+          {isConnected && <AccountStatus isConnected={isConnected} />}
+          <Routes>
+            <Route exact path="/" element={<Home isMmInstalled = {isMmInstalled} tokenAddress={tokenAddress} connectOnClick={connectOnClick} isConnected={isConnected} />} />
+            <Route path="/mint" element={<Mint tokenAddress={tokenAddress} />} />
+            <Route path="/myNfts" element={<OwnedNfts tokenAddress={tokenAddress} marketAddress={marketAddress} listingPrice={listingPrice} />} />
+            <Route path="/marketplace" element={<Marketplace tokenAddress={tokenAddress} marketAddress={marketAddress} />} />
+          </Routes>
+        </Router>
+      </div>
+
     </>
 
   );

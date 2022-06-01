@@ -10,7 +10,7 @@ function Snackbar(props) {
 
     useEffect(() => {
         beginCloseTimeout();
-    }, []);
+    },[]);
 
 
     const closeSnackBar = () => {

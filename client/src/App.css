@@ -2,9 +2,12 @@
 .App {
   text-align: center;
   background-color: #191919;
-  height: 100vh;
   position: relative;
-  overflow: auto;
+}
+
+input{
+  font-size: 15px;
+  height: 30px;
 }
 
 .App-logo {

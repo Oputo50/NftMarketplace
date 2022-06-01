@@ -1,14 +1,12 @@
-import React, { useEffect, Component, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import './AccountStatus.scss';
 
 const AccountStatus = (props) => {
 
-    const [isConnected, setIsConnected] = useState(false);
     const [connectedAcc, setconnectedAcc] = useState('');
 
     useEffect(() => {
-        setIsConnected(props.isConnected);
         if (props.isConnected) {
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const signer = provider.getSigner();
@@ -16,7 +14,7 @@ const AccountStatus = (props) => {
                 setconnectedAcc(res);
             })
         }
-    }, [])
+    }, [props.isConnected])
 
 
     return (
