@@ -8,7 +8,7 @@ import Marketplace from "../../contracts/Marketplace.json";
 
 function ReList(props) {
     const [price, setPrice] = useState("");
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const provider = new ethers.providers.InfuraProvider("ropsten",process.env.INFURA_KEY);
     const signer = provider.getSigner();
     const marketplaceContract = new ethers.Contract(props.marketAddress, Marketplace.abi, provider);
 
@@ -23,10 +23,10 @@ function ReList(props) {
        await tx.wait();
         marketplaceContract.on("ItemPriceChanged",() => {
          console.log("on item price change");
+         props.startLoader(false);
+         showSuccessMessage("Yay!","The price of your NFT have been succefully changed.");
+         props.triggerReload();
       })
-      props.startLoader(false);
-      showSuccessMessage("Yay!","The price of your NFT have been succefully changed.");
-      props.triggerReload();
        
       } catch (error) {
         showErrorMessage(error.message);
