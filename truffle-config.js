@@ -20,6 +20,14 @@ module.exports = {
       },
       network_id: "3",
       gas: 4000000 
+    },
+    goerli: {
+      provider: function () {
+        return new WalletProvider(MNEMONIC,INFURA_API_URL);
+      },
+      network_id: '5', // eslint-disable-line camelcase
+      gas: 4465030,
+      gasPrice: 10000000000,
     }
   },
   compilers:{

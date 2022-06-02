@@ -43,6 +43,7 @@ function SellNft(props) {
                 })
             } catch (error) {
                 props.startLoader(false);
+                showErrorMessage(error.message);
             }
 
 

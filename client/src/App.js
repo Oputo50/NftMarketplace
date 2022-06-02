@@ -16,7 +16,6 @@ import { showErrorMessage } from "./utils/TriggerSnackbar";
 const App = () => {
   const tokenAddress = "0x2d9544c343b3f32A82FBE79C45cc57Aef7345407";
   const marketAddress = "0xA9A2E9F64A9cc67508d244548A0787207206D214";
-
   const [listingPrice, setListingPrice] = useState();
 
   const [isConnected, setIsConnected] = useState(false);
@@ -38,10 +37,7 @@ const App = () => {
         const marketplaceContract = new ethers.Contract(marketAddress, MarketplaceContract.abi, provider);
         const signer = provider.getSigner();
         getCurrNetwork();
-
-        if (chainId !== 3) {
-          showErrorMessage("Wrong network", "Please make sure you are connected to Ropsten network");
-        }
+        console.log(chainId,"chainId");
 
         provider.listAccounts().then((accounts) => {
 
@@ -62,12 +58,20 @@ const App = () => {
       }
     }
 
-  }, [isConnected, chainId,isMmInstalled])
+  }, [isConnected,isMmInstalled,listingPrice])
+
+  useEffect(() => {
+
+  }, [chainId]);
 
   try {
     window.ethereum.on('accountsChanged', function (accounts) {
       window.location.reload();
     })
+
+    window.ethereum.on('networkChanged', function(networkId){
+      window.location.reload();
+    });
   } catch (error) {
     console.log(error);
   }
@@ -76,6 +80,11 @@ const App = () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
     let { chainId } = await provider.getNetwork();
     setChainId(chainId);
+
+    if (chainId !== 3) {
+      showErrorMessage("Wrong network", "Please make sure you are connected to Ropsten network");
+    }
+
   }
 
 
