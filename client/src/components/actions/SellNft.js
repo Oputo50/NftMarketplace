@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import { ethers } from 'ethers';
 import { utils } from 'ethers';
 import MyTokenContract from "../../contracts/MyToken.json"
@@ -36,15 +36,18 @@ function SellNft(props) {
             try {
                 await marketplaceContract.connect(signer).createMarketItem(props.tokenAddress, props.tokenId, utils.parseEther(price), overrides);
 
+            } catch (error) {
+                props.startLoader(false);
+                showErrorMessage(error.message);
+            }
+
+            provider.on("block", (blockNumber) => {
                 marketplaceContract.on("MarketItemCreated", ({ tokenId }) => {
                     props.triggerReload();
                     props.startLoader(false);
                     showSuccessMessage("Yay!", "You NFT was successfully listed!");
                 })
-            } catch (error) {
-                props.startLoader(false);
-                showErrorMessage(error.message);
-            }
+            })
 
 
 
