@@ -7,7 +7,7 @@ import { showErrorMessage, showSuccessMessage } from "../../utils/TriggerSnackba
 const SendNft = (props) => {
     const [toAddress, setToAddress] = useState('');
     const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const myNftContract = new ethers.Contract(props.tokenAddress, MyTokenContract.abi, provider);
+    const tokenContract = new ethers.Contract(props.tokenAddress, MyTokenContract.abi, provider);
     const signer = provider.getSigner();
 
     useEffect(() => {
@@ -23,14 +23,14 @@ const SendNft = (props) => {
 
         if (ethers.utils.isAddress(toAddress)) {
            props.startLoader(true);
-           await myNftContract.connect(signer).sendNft(toAddress, props.tokenId);
+           await tokenContract.connect(signer).sendNft(toAddress, props.tokenId);
         } else {
             showErrorMessage("Oops!", "You must enter a valid address");
             
         }
 
         provider.on("block", (blockNumber) => {
-            marketplaceContract.on("TokenSent", ({ tokenId }) => {
+            tokenContract.on("TokenSent", ({ tokenId }) => {
                 props.startLoader(false);
                 props.triggerReload();
                 showSuccessMessage("Yay!", "Your NFT was successfully sent.");
