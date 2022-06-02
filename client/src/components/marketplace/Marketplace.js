@@ -5,6 +5,8 @@ import ERC721Contract from "../../contracts/ERC721.json";
 import "./Marketplace.scss";
 import MarketItem from './MarketItem';
 import Loader from '../loader/Loader';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 function Marketplace(props) {
 
@@ -93,10 +95,10 @@ function Marketplace(props) {
       </div>
       <div className="searchDiv">
         <div className="left">
-          <span>Search</span>
+        <input type="text" placeholder="Search By Name" onKeyUp={(e)=>(onKeyUpHandler(e))}></input>
         </div>
         <div className="right">
-          <input type="text" placeholder="Enter ID or Name" onKeyUp={(e)=>(onKeyUpHandler(e))}></input>
+          <span><FontAwesomeIcon icon={faMagnifyingGlass}/></span>
         </div>
       </div>
         <div className="market-items">

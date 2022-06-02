@@ -27,7 +27,6 @@ function ReList(props) {
 
       provider.on("block", (blockNumber) => {
         marketplaceContract.on("ItemPriceChanged",() => {
-          console.log("on item price change");
           props.startLoader(false);
           showSuccessMessage("Yay!","The price of your NFT have been succefully changed.");
           props.triggerReload();

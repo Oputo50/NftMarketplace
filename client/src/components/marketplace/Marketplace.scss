@@ -1,16 +1,14 @@
-
-
-.marketplace{
+.marketplace {
     height: 100vh;
     display: flow-root;
     overflow: auto;
 
-    .title{
-        display:block;
+    .title {
+        display: block;
         text-align: center;
     }
 
-    .searchDiv{
+    .searchDiv {
         position: relative;
         width: 300px;
         height: 50px;
@@ -20,28 +18,56 @@
         border-radius: 10px;
         margin-top: 50px;
 
-        .left{
+        .left {
+            align-self: center;
+            flex: 0.7;
+            width: 100%;
+            padding-left: 10px;
+
+            input {
+                background-color: #2D4263;
+                width: 100%;
+                color: wheat;
+                font-size: 1.10em;
+                border-block-style: unset;
+                border-width: inherit;
+            }
+
+            ::placeholder {
+                /* Chrome, Firefox, Opera, Safari 10.1+ */
+                color: wheat;
+                opacity: 1;
+                /* Firefox */
+            }
+
+            :-ms-input-placeholder {
+                /* Internet Explorer 10-11 */
+                color: wheat;
+            }
+
+            ::-ms-input-placeholder {
+                /* Microsoft Edge */
+                color: wheat;
+            }
+        }
+
+        .right {
             flex: 0.3;
             font-size: 15px;
             align-self: center;
         }
-
-        .right{
-            flex: 0.7;
-            align-self: center;
-        }
     }
 
-        
-        .market-items{
-            display: grid;
-            grid-template-columns: repeat(4,1fr);
-            row-gap: 30px;
-            width: 100%;
-            place-items: center;
-            padding-bottom: 30px;
-            height: auto;
-            margin-top: 30px;
-        }
+
+    .market-items {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        row-gap: 30px;
+        width: 100%;
+        place-items: center;
+        padding-bottom: 30px;
+        height: auto;
+        margin-top: 30px;
+    }
 
 }

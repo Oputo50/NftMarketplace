@@ -37,7 +37,6 @@ const App = () => {
         const marketplaceContract = new ethers.Contract(marketAddress, MarketplaceContract.abi, provider);
         const signer = provider.getSigner();
         getCurrNetwork();
-        console.log(chainId,"chainId");
 
         provider.listAccounts().then((accounts) => {
 
@@ -62,6 +61,8 @@ const App = () => {
 
   useEffect(() => {
 
+    console.log("If you're seeing this log: Have a great day :D");
+
   }, [chainId]);
 
   try {
@@ -73,7 +74,7 @@ const App = () => {
       window.location.reload();
     });
   } catch (error) {
-    console.log(error);
+    showErrorMessage(error.message);
   }
 
   const getCurrNetwork = async () => {
@@ -82,7 +83,7 @@ const App = () => {
     setChainId(chainId);
 
     if (chainId !== 5) {
-      showErrorMessage("Wrong network", "Please make sure you are connected to Ropsten network");
+      showErrorMessage("Wrong network!", "Please make sure you are connected to Goerli network.");
     }
 
   }

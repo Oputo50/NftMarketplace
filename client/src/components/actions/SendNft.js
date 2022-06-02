@@ -15,7 +15,6 @@ const SendNft = (props) => {
     }, [toAddress]);
 
     const handleTextChange = (event) => {
-        console.log(toAddress);
         setToAddress(event.target.value);
     }
 
