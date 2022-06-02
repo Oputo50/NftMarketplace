@@ -16,14 +16,13 @@ module.exports = {
     ropsten: {
       networkCheckTimeout: 10000, 
       provider: function () {
-       return new WalletProvider(MNEMONIC,INFURA_API_URL);
+       return new WalletProvider(MNEMONIC,INFURA_API_URL,0);
       },
-      network_id: "3",
-      gas: 4000000 
+      network_id: "3"
     },
     goerli: {
       provider: function () {
-        return new WalletProvider(MNEMONIC,INFURA_API_URL);
+        return new WalletProvider(MNEMONIC,INFURA_API_URL,0);
       },
       network_id: '5', // eslint-disable-line camelcase
       gas: 4465030,

@@ -14,8 +14,8 @@ import { showErrorMessage } from "./utils/TriggerSnackbar";
 
 
 const App = () => {
-  const tokenAddress = "0x2d9544c343b3f32A82FBE79C45cc57Aef7345407";
-  const marketAddress = "0xA9A2E9F64A9cc67508d244548A0787207206D214";
+  const tokenAddress = "0x2996A553F2bedEce3a7009251Aacc89521b8A247";
+  const marketAddress = "0x63eD3670F09A62CBC5c7DDF98FAB09C84D4e936A";
   const [listingPrice, setListingPrice] = useState();
 
   const [isConnected, setIsConnected] = useState(false);
@@ -81,7 +81,7 @@ const App = () => {
     let { chainId } = await provider.getNetwork();
     setChainId(chainId);
 
-    if (chainId !== 3) {
+    if (chainId !== 5) {
       showErrorMessage("Wrong network", "Please make sure you are connected to Ropsten network");
     }
 

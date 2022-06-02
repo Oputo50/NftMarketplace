@@ -47,6 +47,12 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
         uint price
     );
 
+    event ItemCancelled (
+        address indexed nftContract,
+        uint indexed tokenId,
+        uint itemId
+    );
+
     function createMarketItem(
         address nftContract,
         uint256 tokenId,
@@ -138,10 +144,12 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
     }
 
     function cancelListing(address nftContract, uint256 marketItemId) public {
-        require(idToMarketItem[marketItemId].seller == msg.sender,"You must be the seller in order to cancel the listing");
+        require(idToMarketItem[marketItemId].seller == msg.sender,"You must be the seller in order to cancel the listing.");
+        require(idToMarketItem[marketItemId].isCancelled == false, "This item has already been cancelled.");
          IERC721(nftContract).safeTransferFrom(address(this),msg.sender,idToMarketItem[marketItemId].tokenId);
          idToMarketItem[marketItemId].isCancelled = true;
          _itemsCancelled.increment();
+         emit ItemCancelled(nftContract,idToMarketItem[marketItemId].tokenId, marketItemId);
     }
 
     function changeItemPrice(uint256 marketItemId, uint256 price) public {

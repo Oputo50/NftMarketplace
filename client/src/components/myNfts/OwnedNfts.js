@@ -118,14 +118,18 @@ const OwnedNfts = (props) => {
         try {
             setTriggerLoader(true);
             await marketplaceContract.connect(signer).cancelListing(props.tokenAddress, itemId);
-            setTriggerLoader(false);
-            showSuccessMessage("Success!", "Your item was unlisted.")
-            refreshComponent();
         } catch (error) {
             showErrorMessage(error.message);
             setTriggerLoader(false);
         }
 
+        provider.on("block", (blockNumber) => {
+            marketplaceContract.on("ItemCancelled", ({ tokenId }) => {
+                setTriggerLoader(false);
+                showSuccessMessage("Success!", "Your item was unlisted.");
+                refreshComponent();
+            })
+        })
 
     }
 

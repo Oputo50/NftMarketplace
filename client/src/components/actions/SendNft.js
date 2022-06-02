@@ -24,13 +24,18 @@ const SendNft = (props) => {
         if (ethers.utils.isAddress(toAddress)) {
            props.startLoader(true);
            await myNftContract.connect(signer).sendNft(toAddress, props.tokenId);
-           props.startLoader(false);
-           props.triggerReload();
-            showSuccessMessage("Yay!", "Your NFT was successfully sent.");
         } else {
             showErrorMessage("Oops!", "You must enter a valid address");
             
         }
+
+        provider.on("block", (blockNumber) => {
+            marketplaceContract.on("TokenSent", ({ tokenId }) => {
+                props.startLoader(false);
+                props.triggerReload();
+                showSuccessMessage("Yay!", "Your NFT was successfully sent.");
+            })
+        })
 
     }
 

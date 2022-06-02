@@ -20,7 +20,7 @@ contract MyToken is
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
-    constructor() ERC721("Puto Token", "PTT") {}
+    constructor() ERC721("PutoMarketPlace Token", "PTT") {}
 
     struct Metadata {
         string text;
@@ -35,6 +35,8 @@ contract MyToken is
     string private _currentBaseURI;
 
     event tokenMint (uint256 tokenId);
+
+    event TokenSent (uint256 tokenId, address sentFrom, address sentTo);
 
     function mint(string memory hash, string memory metadata)
         external
@@ -86,6 +88,7 @@ contract MyToken is
         ownerNftCount[to] = ownerNftCount[to].add(1);
         _beforeTokenTransfer(msg.sender, to, tokenId);
         transferFrom(msg.sender, to, tokenId);
+        emit TokenSent(tokenId, msg.sender, to);
     }
 
     function supportsInterface(bytes4 interfaceId)

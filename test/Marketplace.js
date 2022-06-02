@@ -25,9 +25,9 @@ contract("Marketplace", (accounts) => {
 
         await tokenInstance.approve(marketAddress, 2, { from: buyer });
 
-        await marketInstance.createMarketItem(tokenAddress, 1, 200, { from: minter, value: web3.utils.toWei("0.2"), gas: 2000000 });
+        await marketInstance.createMarketItem(tokenAddress, 1, 200, { from: minter, value: web3.utils.toWei("0.001"), gas: 2000000 });
 
-        await marketInstance.createMarketItem(tokenAddress, 2, 200, { from: buyer, value: web3.utils.toWei("0.2"), gas: 2000000 });
+        await marketInstance.createMarketItem(tokenAddress, 2, 200, { from: buyer, value: web3.utils.toWei("0.001"), gas: 2000000 });
 
         const marketItems = await marketInstance.fetchMarketItems.call({from:minter});
 
