@@ -22,10 +22,11 @@ function ReList(props) {
        let tx = await marketplaceContract.connect(signer).changeItemPrice(props.itemId, ethers.utils.parseEther(price));
        await tx.wait();
         marketplaceContract.on("ItemPriceChanged",() => {
-          props.startLoader(false);
-          showSuccessMessage("Yay!","The price of your NFT have been succefully changed.");
-          props.triggerReload();
+         console.log("on item price change");
       })
+      props.startLoader(false);
+      showSuccessMessage("Yay!","The price of your NFT have been succefully changed.");
+      props.triggerReload();
        
       } catch (error) {
         showErrorMessage(error.message);
