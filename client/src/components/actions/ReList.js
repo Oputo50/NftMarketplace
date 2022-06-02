@@ -19,20 +19,20 @@ function ReList(props) {
     const changePrice = async () => {
       try {
         props.startLoader(true);
-       let tx = await marketplaceContract.connect(signer).changeItemPrice(props.itemId, ethers.utils.parseEther(price));
-       await tx.wait();
-        marketplaceContract.on("ItemPriceChanged",() => {
-         console.log("on item price change");
-         props.startLoader(false);
-         showSuccessMessage("Yay!","The price of your NFT have been succefully changed.");
-         props.triggerReload();
-      })
-     
-       
-      } catch (error) {
+        await marketplaceContract.connect(signer).changeItemPrice(props.itemId, ethers.utils.parseEther(price));
+         } catch (error) {
         showErrorMessage(error.message);
         props.startLoader(false);
       }
+
+      provider.on("block", (blockNumber) => {
+        marketplaceContract.on("ItemPriceChanged",() => {
+          console.log("on item price change");
+          props.startLoader(false);
+          showSuccessMessage("Yay!","The price of your NFT have been succefully changed.");
+          props.triggerReload();
+        }) 
+       })
     }
 
   return (
