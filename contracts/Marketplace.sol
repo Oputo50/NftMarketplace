@@ -7,19 +7,35 @@ import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 import '@openzeppelin/contracts/security/ReentrancyGuard.sol';
 
+/// @title Marketplace
+/// @notice Simple ERC721 tokens Marketplace contract that let listing a token, cancel, change its price and buy it.
+/// @dev Pedro Cabral
 contract Marketplace is ReentrancyGuard, ERC721Holder{
     using Counters for Counters.Counter;
     Counters.Counter private _itemIds;
     Counters.Counter private _itemsSold;
     Counters.Counter private _itemsCancelled;
 
+    /**
+      * @notice Contract owner
+     */
     address payable owner;
+
+    /**
+      * @notice Price to list a NFT
+     */
     uint256 listingPrice = 0.001 ether;
 
+    /**
+      * @notice The Marketplace constructor
+     */
     constructor(){
         owner = payable(msg.sender);
     }
 
+     /**
+      * @notice Struct that will hold the information about a market item
+     */
     struct MarketItem {
         uint itemId;
         address nftContract;
@@ -30,8 +46,14 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
         bool isCancelled;
     }
 
+     /**
+      * @notice To keep track of all market items
+     */
     mapping(uint256 => MarketItem) private idToMarketItem;
 
+    /**
+      * @notice Event to emit every time a market item is created
+     */
     event MarketItemCreated (
         uint indexed itemId,
         address indexed nftContract,
@@ -41,18 +63,39 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
         uint256 price
     );
 
+      /**
+      * @notice Event to emit every time a market item's price is replaced
+     */
     event ItemPriceChanged (
         address indexed nftContract,
         uint indexed tokenId,
         uint price
     );
 
+      /**
+      * @notice Event to emit every time a market item is cancelled
+     */
     event ItemCancelled (
         address indexed nftContract,
         uint indexed tokenId,
         uint itemId
     );
 
+     /**
+      * @notice Event to emit every time a market item is cancelled
+     */
+    event ItemBuy (
+        address indexed nftContract,
+        uint indexed tokenId,
+        uint itemId
+    );
+
+      /**
+      * @notice A method to list a nft on the marketplace
+      * @param nftContract The nft contract address
+      * @param tokenId The nft token id
+      * @param price The price wich the item will be listed
+     */
     function createMarketItem(
         address nftContract,
         uint256 tokenId,
@@ -79,6 +122,11 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
         emit MarketItemCreated(itemId, nftContract, tokenId, msg.sender, address(0), price);
     }
 
+     /**
+      * @notice Event to emit every time a market item is created
+      * @param nftContract The nft contract address
+      * @param itemId The market item Id of the item that will be sold
+     */ 
     function sellMarketItem(
         address nftContract,
         uint256 itemId
@@ -99,6 +147,9 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
         payable(owner).transfer(listingPrice);
     }
 
+    /**
+    * @notice Method to retrieve all available market items
+    */ 
     function fetchMarketItems() public view returns (MarketItem[] memory) {
         uint itemCount = _itemIds.current();
         uint availableItemCount = itemCount - _itemsSold.current() - _itemsCancelled.current();
@@ -117,6 +168,9 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
         return items;
     }
 
+    /**
+      * @notice Method that retrieves all items listed by the address who calls this function
+     */ 
     function getListedItemsBySeller() public view returns (MarketItem[] memory){
         uint itemCount = _itemIds.current();
         uint256 sellerItems = 0;
@@ -143,6 +197,11 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
 
     }
 
+    /**
+      * @notice Method to cancel a market item listing
+      * @param nftContract The nft contract address
+      * @param marketItemId The market item Id of the item that will be sold
+     */ 
     function cancelListing(address nftContract, uint256 marketItemId) public {
         require(idToMarketItem[marketItemId].seller == msg.sender,"You must be the seller in order to cancel the listing.");
         require(idToMarketItem[marketItemId].isCancelled == false, "This item has already been cancelled.");
@@ -152,12 +211,20 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
          emit ItemCancelled(nftContract,idToMarketItem[marketItemId].tokenId, marketItemId);
     }
 
+    /**
+      * @notice Method to cancel a market item listing
+      * @param marketItemId The market item Id of the item that will be sold
+      * @param price The new item price that will replace the current price
+     */
     function changeItemPrice(uint256 marketItemId, uint256 price) public {
         require(idToMarketItem[marketItemId].seller == msg.sender,"You must be the seller in order to cancel the listing");
         idToMarketItem[marketItemId].price = price;
         emit ItemPriceChanged(idToMarketItem[marketItemId].nftContract, idToMarketItem[marketItemId].tokenId, price);
     }
 
+     /**
+      * @notice Method that retrieves the price of listing a nft 
+     */
     function getListingPrice() public view returns (uint256) {
         return listingPrice;
     }

@@ -49,6 +49,10 @@ function Marketplace(props) {
 
   }, [search,marketItems])
 
+  const refreshComponent = () => {
+    setTriggerReload(!triggerReload);
+}
+
   const fetchMarketItems = async () => {
     const items = await marketplace.connect(signer).fetchMarketItems();
     let tokenContract = new ethers.Contract(props.tokenAddress, ERC721Contract.abi, provider);
@@ -78,6 +82,7 @@ function Marketplace(props) {
     }));
 
     setMarketItems(tokensList);
+    setFilteredList(filteredList);
     setTriggerLoader(false);
 
   }
@@ -105,7 +110,7 @@ function Marketplace(props) {
           {
             filteredList &&
             filteredList.map((item) => {
-              return <MarketItem item={item} marketPlace={marketplace} key={item.itemId} tokenAddress={props.tokenAddress} seller={item.seller} triggerReload={()=> setTriggerReload}></MarketItem>
+              return <MarketItem triggerReload={refreshComponent}  startLoader={setTriggerLoader} item={item} marketPlace={marketplace} key={item.itemId} tokenAddress={props.tokenAddress} seller={item.seller} ></MarketItem>
             })
           }
       </div>

@@ -136,7 +136,6 @@ function Mint(props) {
                 pinata_secret_api_key: PinataKeys[0].apiSecret,
             }
         }).then(function (response) {
-            console.log(response.data.IpfsHash)
 
             return response.data.IpfsHash
 
@@ -157,7 +156,7 @@ function Mint(props) {
 
                 mintNft(hash, metadataHash);
             }).catch(function (error) {
-                console.log(error);
+                showErrorMessage(error.message);
             })
         })
 

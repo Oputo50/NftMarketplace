@@ -166,8 +166,8 @@ const OwnedNfts = (props) => {
                                                 <div className="nft-actions">
                                                     {
                                                         activeTab === "UI" && <>
-                                                            <PopUp buttonLabel={'Sell NFT'} content={<SellNft tokenAddress={props.tokenAddress} triggerReload={refreshComponent} marketAddress={props.marketAddress} tokenId={nft.tokenId} name={nft.name} listingPrice={props.listingPrice} startLoader={setTriggerLoader} />} />
-                                                            <PopUp buttonLabel={'Send NFT'} content={<SendNft tokenAddress={props.tokenAddress} triggerReload={refreshComponent} tokenId={nft.tokenId} startLoader={setTriggerLoader} />} />
+                                                            <PopUp buttonLabel={'Sell NFT'} content={<SellNft tokenAddress={props.tokenAddress} triggerReload={refreshComponent}  startLoader={setTriggerLoader}  marketAddress={props.marketAddress} tokenId={nft.tokenId} name={nft.name} listingPrice={props.listingPrice}/>} />
+                                                            <PopUp buttonLabel={'Send NFT'} content={<SendNft tokenAddress={props.tokenAddress} triggerReload={refreshComponent}  startLoader={setTriggerLoader}  tokenId={nft.tokenId} />} />
                                                         </>
                                                     }
                                                     {
@@ -178,7 +178,7 @@ const OwnedNfts = (props) => {
                                                                     <FontAwesomeIcon className="edit-icon" icon={faEthereum} />
                                                                 </div>
                                                                 <div >
-                                                                    <PopUp buttonLabel={<FontAwesomeIcon icon={faPenToSquare} />} content={<ReList tokenAddress={props.tokenAddress} marketAddress={props.marketAddress} triggerReload={refreshComponent} name={nft.name} tokenId={nft.tokenId} itemId={nft.itemId} startLoader={setTriggerLoader} />} />
+                                                                    <PopUp buttonLabel={<FontAwesomeIcon icon={faPenToSquare} />} content={<ReList tokenAddress={props.tokenAddress} marketAddress={props.marketAddress} triggerReload={refreshComponent}  startLoader={setTriggerLoader} name={nft.name} tokenId={nft.tokenId} itemId={nft.itemId}/>} />
                                                                 </div>
                                                             </div>
 

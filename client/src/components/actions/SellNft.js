@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import { utils } from 'ethers';
-import MyTokenContract from "../../contracts/MyToken.json"
+import ERC721 from "../../contracts/ERC721.json";
 import Marketplace from "../../contracts/Marketplace.json";
 import "./Actions.scss";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,6 +13,9 @@ function SellNft(props) {
     const [price, setPrice] = useState("");
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const marketplaceContract = new ethers.Contract(props.marketAddress, Marketplace.abi, provider);
+    let myNftContract = new ethers.Contract(props.tokenAddress, ERC721.abi, provider);
+    const signer = provider.getSigner();
+    const overrides = { value: utils.parseEther(props.listingPrice)};
 
     const handlePriceChange = (event) => {
         setPrice(event.target.value);
@@ -21,41 +24,33 @@ function SellNft(props) {
     const sellNft = async () => {
 
         if (validatePrice()) {
-            const signer = provider.getSigner();
-
-            let overrides = { value: utils.parseEther(props.listingPrice) };
-
-            let myNftContract = new ethers.Contract(props.tokenAddress, MyTokenContract.abi, provider);
-
             await myNftContract.connect(signer).approve(props.marketAddress, props.tokenId);
 
             showWarningMessage("", "Approving...");
 
             props.startLoader(true);
 
-            try {
-                await marketplaceContract.connect(signer).createMarketItem(props.tokenAddress, props.tokenId, utils.parseEther(price), overrides);
-
-            } catch (error) {
-                props.startLoader(false);
-                showErrorMessage(error.message);
-            }
-
-            provider.on("block", (blockNumber) => {
-                marketplaceContract.on("MarketItemCreated", ({ tokenId }) => {
-                    props.triggerReload();
+            myNftContract.on("Approval", async () => {
+                showSuccessMessage("Success!", "Approved.")
+        
+                try {
+                   await marketplaceContract.connect(signer).createMarketItem(props.tokenAddress, props.tokenId, utils.parseEther(price), overrides);
+                } catch (error) {
                     props.startLoader(false);
-                    showSuccessMessage("Yay!", "You NFT was successfully listed!");
-                })
+                    showErrorMessage(error.message);
+                    props.triggerReload();
+                }
             })
-
-
+        
+            marketplaceContract.on("MarketItemCreated", ({ tokenId }) => {
+                props.startLoader(false);
+                showSuccessMessage("Yay!", "You NFT was successfully listed!");
+                props.triggerReload();
+            })
 
         } else {
             showErrorMessage("Oops!", "NFT price must be greater than 0 ether");
         }
-
-
 
     }
 
@@ -71,12 +66,12 @@ function SellNft(props) {
 
         <div className="actions-content">
             <div>
-                <p>{"Please enter " + props.name + " #" + props.tokenId + "'s price"}</p>
+                <p>{"Please enter " + props.name + "'s price"}</p>
                 <input onChange={handlePriceChange} className="mt-3" type="number" step="0.01" min="0"></input>
                 <FontAwesomeIcon style={{ 'marginLeft': '10px' }} icon={faEthereum} size={"2x"} />
             </div>
             <div className='actions'>
-                <button className='action-btn' onClick={sellNft}>Sell</button>
+                <button className='action-btn' onClick={() => sellNft()}>Sell</button>
             </div>
         </div>
 

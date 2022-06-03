@@ -39,7 +39,7 @@ function ReList(props) {
        
             <div className="actions-content">
                 <div>
-                <p>{"Please enter " + props.name + " #"+ props.tokenId + "'s price"}</p>
+                <p>{"Please enter " + props.name + "'s price"}</p>
                     <input onChange={handlePriceChange} className="mt-3" type="number" step="0.01" min="0"></input>
                     <FontAwesomeIcon style={{'marginLeft':'10px'}} icon={faEthereum}  size={"2x"}/>
                 </div>
