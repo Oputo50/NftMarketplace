@@ -1,7 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import "./MarketItem.scss";
-import ERC721Contract from "../../contracts/ERC721.json";
 import { faEthereum } from '@fortawesome/free-brands-svg-icons/faEthereum';
 import { ethers } from 'ethers';
 import { showErrorMessage, showSuccessMessage } from '../../utils/TriggerSnackbar';
@@ -16,17 +15,15 @@ function MarketItem(props) {
 
   const [sellerAddress_toShow, setSellerAddress] = useState("");
 
-
   useEffect(() => {
     setSellerAddress(props.item.seller.substring(0,8));
     provider.listAccounts().then((accounts) => {
       setUserAccount(accounts[0]);
     })
 
-  }, [provider, userAccount])
+  }, [userAccount])
 
   const onBuyClick = async () => {
-    const tokenContract = new ethers.Contract(props.tokenAddress, ERC721Contract.abi, provider);
     try {
       props.startLoader(true);
       await props.marketPlace.connect(signer).sellMarketItem(props.tokenAddress, props.item.itemId, { value: ethers.utils.parseEther(props.item.price) });
@@ -34,14 +31,6 @@ function MarketItem(props) {
       showErrorMessage("Something went wrong!", error.message);
       props.startLoader(false);
     }
-
-    provider.on("block", (blockNumber) => {
-      tokenContract.on("Transfer",() => {
-        props.startLoader(false);
-        showSuccessMessage("Comgratulations!", "You have successfully bought " + props.item.name + " NFT.");
-        props.triggerReload();
-      }) 
-     })
   }
 
   const copySellerToClipboard = (seller) => {

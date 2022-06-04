@@ -10,27 +10,48 @@
         justify-content: center;
     }
 
-    .tabs {
+    .tabs-wrapper {
+
         display: flex;
         justify-content: center;
         margin-top: 30px;
 
-        .active {
-            text-decoration: underline;
-            color: wheat;
+        .tabs {
+            display: flex;
+            justify-content: center;
+            width: 50%;
+            height: 50px;
+            align-items: center;
+            background-color: #2D4263;
+            border-radius: 10px;
+            font-family: 'Roboto';
+
+            .active {
+                text-decoration: underline;
+                color: wheat;
+            }
+
+            .tab {
+                cursor: pointer;
+                font-size: x-large;
+            }
+
+
+
+            :first-child {
+                margin-right: 15px;
+            }
         }
 
-        .tab {
-            cursor: pointer;
-            font-size: x-large;
-        }
-
-
-
-        :first-child {
-            margin-right: 15px;
+        .listing-price{
+            position: relative;
+            .price-tooltip{
+                position: absolute;
+                margin-left: 50px;
+            }
         }
     }
+
 
 
     .wrapper {
@@ -44,7 +65,7 @@
 
         .content-list {
             display: grid;
-            grid-template-columns: repeat(4,1fr);
+            grid-template-columns: repeat(4, 1fr);
             row-gap: 30px;
             width: 100%;
             place-items: center;
@@ -58,14 +79,14 @@
                 width: 300px;
 
                 .item {
-
+                    width: min-content;
                     .nft {
                         padding: 10px 10px 10px 10px;
                         background-color: lightgray;
 
                         .nft-name {
                             text-align: center;
-                            font-size: 30px;
+                            font-size: 1.25em;
                             color: #191919;
                             font-weight: 450;
                             padding-bottom: 10px;
@@ -88,25 +109,25 @@
                             margin-top: 15px;
                             font-size: 14px;
 
-                            .edit-price{
+                            .edit-price {
                                 display: flex;
                                 flex-direction: column;
                                 width: 50%;
                                 gap: 10px;
 
-                                .edit-icon{
+                                .edit-icon {
                                     margin-left: 5px;
                                 }
                             }
 
-                            button{
+                            button {
                                 background-color: #7393B3;
                                 border-radius: 10px;
                                 transition: all 1s ease;
                                 width: fit-content;
                                 font-size: 1.25em;
-                              }
-        
+                            }
+
 
                         }
                     }
@@ -119,7 +140,7 @@
     }
 }
 
-button:hover{
+button:hover {
     background-color: #234fec !important;
     cursor: pointer;
-  }
+}

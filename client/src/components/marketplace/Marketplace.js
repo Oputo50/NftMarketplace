@@ -7,6 +7,7 @@ import MarketItem from './MarketItem';
 import Loader from '../loader/Loader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { showSuccessMessage } from '../../utils/TriggerSnackbar';
 
 function Marketplace(props) {
 
@@ -16,7 +17,7 @@ function Marketplace(props) {
 
   const [search, setSearch] = useState("");
 
-  const [triggerReload,setTriggerReload] = useState(false);
+  const [triggerReload, setTriggerReload] = useState(false);
 
   const [triggerLoader, setTriggerLoader] = useState(false);
 
@@ -24,12 +25,20 @@ function Marketplace(props) {
 
   const marketplace = new ethers.Contract(props.marketAddress, MarketplaceContract.abi, provider);
 
-  const signer = provider.getSigner();
+  const tokenContract = new ethers.Contract(props.tokenAddress, ERC721Contract.abi, provider);
 
+  const signer = provider.getSigner();
 
   useEffect(() => {
     setTriggerLoader(true);
     fetchMarketItems();
+    tokenContract.provider.polling = false;
+
+      tokenContract.on("Transfer", () => {
+        setTriggerLoader(false);
+        showSuccessMessage("Congratulations!", "Purchase successfuly executed");
+        setTriggerReload(!triggerReload);
+      })
 
   }, [triggerReload])
 
@@ -38,24 +47,24 @@ function Marketplace(props) {
   }, [triggerLoader]);
 
   useEffect(() => {
-    if(marketItems.length !== 0){
-    const filteredList = marketItems.filter((item) => {
-      let all_str = `${item.tokenId} ${item.name}`.toLowerCase();
-   
-      return all_str.indexOf(search) > -1 
-    });
-    setFilteredList(filteredList);
-  }
+    if (marketItems.length !== 0) {
+      const filteredList = marketItems.filter((item) => {
+        let all_str = `${item.tokenId} ${item.name}`.toLowerCase();
 
-  }, [search,marketItems])
+        return all_str.indexOf(search) > -1
+      });
+      setFilteredList(filteredList);
+    }
+
+  }, [search, marketItems])
+
 
   const refreshComponent = () => {
     setTriggerReload(!triggerReload);
-}
+  }
 
   const fetchMarketItems = async () => {
     const items = await marketplace.connect(signer).fetchMarketItems();
-    let tokenContract = new ethers.Contract(props.tokenAddress, ERC721Contract.abi, provider);
     let tokensList = [];
 
     tokensList = await Promise.all(items.map(async ({ tokenId, nftContract, itemId, price, seller, owner }) => {
@@ -93,30 +102,30 @@ function Marketplace(props) {
 
   return (
     <>
-    <Loader isActive={triggerLoader} />
-    <div className='marketplace'>
-      <div className="title">
-        <h1>Marketplace</h1>
-      </div>
-      <div className="searchDiv">
-        <div className="left">
-        <input type="text" placeholder="Search By Name" onKeyUp={(e)=>(onKeyUpHandler(e))}></input>
+      <Loader isActive={triggerLoader} />
+      <div className='marketplace'>
+        <div className="title">
+          <h1>Marketplace</h1>
         </div>
-        <div className="right">
-          <span><FontAwesomeIcon icon={faMagnifyingGlass}/></span>
+        <div className="searchDiv">
+          <div className="left">
+            <input type="text" placeholder="Search By Name" onKeyUp={(e) => (onKeyUpHandler(e))}></input>
+          </div>
+          <div className="right">
+            <span><FontAwesomeIcon icon={faMagnifyingGlass} /></span>
+          </div>
         </div>
-      </div>
         <div className="market-items">
           {
             filteredList &&
             filteredList.map((item) => {
-              return <MarketItem triggerReload={refreshComponent}  startLoader={setTriggerLoader} item={item} marketPlace={marketplace} key={item.itemId} tokenAddress={props.tokenAddress} seller={item.seller} ></MarketItem>
+              return <MarketItem triggerReload={refreshComponent} startLoader={setTriggerLoader} item={item} marketPlace={marketplace} tokenContract={tokenContract} key={item.itemId} tokenAddress={props.tokenAddress} seller={item.seller} ></MarketItem>
             })
           }
+        </div>
+
+
       </div>
-
-
-    </div>
     </>
   )
 }

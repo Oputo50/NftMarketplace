@@ -11,47 +11,71 @@ import { showErrorMessage, showSuccessMessage, showWarningMessage } from '../../
 
 function SellNft(props) {
     const [price, setPrice] = useState("");
+    const overrides = { value: utils.parseEther(props.listingPrice) };
+    const [isApproved, setIsApproved] = useState();
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const marketplaceContract = new ethers.Contract(props.marketAddress, Marketplace.abi, provider);
     let myNftContract = new ethers.Contract(props.tokenAddress, ERC721.abi, provider);
     const signer = provider.getSigner();
-    const overrides = { value: utils.parseEther(props.listingPrice)};
+
+    useEffect(() => {
+
+        marketplaceContract.provider.polling = false;
+        myNftContract.provider.polling = false;
+        
+        myNftContract.on("Approval", async () => {
+            showSuccessMessage("Success!", "Approved.");
+            setIsApproved(true);
+            props.startLoader(false);
+        })
+
+        marketplaceContract.on("MarketItemCreated", ({ tokenId }) => {
+            Array.from(document.getElementsByClassName("root")).forEach(
+                el => (el.click())
+            );
+            props.startLoader(false);
+            showSuccessMessage("Yay!", "You NFT was successfully listed!");
+            props.triggerReload();
+        })
+    }, [isApproved]);
 
     const handlePriceChange = (event) => {
         setPrice(event.target.value);
     }
 
+    const approveToken = async () => {
+        props.startLoader(true);
+        try {
+            await myNftContract.connect(signer).approve(props.marketAddress, props.tokenId);
+        } catch (error) {
+            props.startLoader(false);
+            showErrorMessage(error.message);
+        }
+
+        showWarningMessage("", "Approving...");
+
+    }
+
     const sellNft = async () => {
 
+
         if (validatePrice()) {
-            await myNftContract.connect(signer).approve(props.marketAddress, props.tokenId);
-
-            showWarningMessage("", "Approving...");
-
             props.startLoader(true);
 
-            myNftContract.on("Approval", async () => {
-                showSuccessMessage("Success!", "Approved.")
-        
+            if (isApproved) {
                 try {
-                   await marketplaceContract.connect(signer).createMarketItem(props.tokenAddress, props.tokenId, utils.parseEther(price), overrides);
+                    await marketplaceContract.connect(signer).createMarketItem(props.tokenAddress, props.tokenId, utils.parseEther(price), overrides);
                 } catch (error) {
                     props.startLoader(false);
                     showErrorMessage(error.message);
                     props.triggerReload();
                 }
-            })
-        
-            marketplaceContract.on("MarketItemCreated", ({ tokenId }) => {
-                props.startLoader(false);
-                showSuccessMessage("Yay!", "You NFT was successfully listed!");
-                props.triggerReload();
-            })
+
+            }
 
         } else {
             showErrorMessage("Oops!", "NFT price must be greater than 0 ether");
         }
-
     }
 
     const validatePrice = () => {
@@ -62,16 +86,26 @@ function SellNft(props) {
         }
     }
 
+
+
     return (
 
         <div className="actions-content">
-            <div>
+            {isApproved && <div>
                 <p>{"Please enter " + props.name + "'s price"}</p>
                 <input onChange={handlePriceChange} className="mt-3" type="number" step="0.01" min="0"></input>
                 <FontAwesomeIcon style={{ 'marginLeft': '10px' }} icon={faEthereum} size={"2x"} />
             </div>
+            }
+
+            {!isApproved &&
+                <div>
+                    <p>{"Please approve the marketplace to move your token."}</p>
+                </div>
+            }
+
             <div className='actions'>
-                <button className='action-btn' onClick={() => sellNft()}>Sell</button>
+                {isApproved ? <button className='action-btn' onClick={() => sellNft()}>Sell</button> : <button className='action-btn' onClick={() => approveToken()}>Approve</button>}
             </div>
         </div>
 

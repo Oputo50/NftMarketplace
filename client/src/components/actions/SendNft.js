@@ -10,9 +10,17 @@ const SendNft = (props) => {
     const tokenContract = new ethers.Contract(props.tokenAddress, MyTokenContract.abi, provider);
     const signer = provider.getSigner();
 
-    useEffect(() => {
-
-    }, [toAddress]);
+    
+    provider.on("block", (blockNumber) => {
+        tokenContract.on("TokenSent", ({ tokenId }) => {
+            props.startLoader(false);
+            props.triggerReload();
+            showSuccessMessage("Yay!", "Your NFT was successfully sent.");
+            Array.from(document.getElementsByClassName("root")).forEach(
+                el => (el.click())
+              );
+        })
+    })
 
     const handleTextChange = (event) => {
         setToAddress(event.target.value);
@@ -22,19 +30,19 @@ const SendNft = (props) => {
 
         if (ethers.utils.isAddress(toAddress)) {
            props.startLoader(true);
-           await tokenContract.connect(signer).sendNft(toAddress, props.tokenId);
+           try {
+            await tokenContract.connect(signer).sendNft(toAddress, props.tokenId);
+           } catch (error) {
+            props.startLoader(false);
+            props.triggerReload();
+            showErrorMessage(error.message);
+           }
+          
         } else {
             showErrorMessage("Oops!", "You must enter a valid address");
             
+            
         }
-
-        provider.on("block", (blockNumber) => {
-            tokenContract.on("TokenSent", ({ tokenId }) => {
-                props.startLoader(false);
-                props.triggerReload();
-                showSuccessMessage("Yay!", "Your NFT was successfully sent.");
-            })
-        })
 
     }
 

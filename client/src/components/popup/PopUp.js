@@ -5,12 +5,12 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 
 const PopUp = (props) => {
-  const [open, setOpen] = useState(false);
   const wrapperRef = useRef(null);
+  const [open,setOpen] = useState(false);
 
   useEffect(() => {
     function handleClickOutside(event) {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target) && open) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target) && open && props.isLoading) {
         setOpen(false);
       }
     }

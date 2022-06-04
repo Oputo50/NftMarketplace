@@ -5,13 +5,14 @@ import { ethers } from "ethers";
 import "./OwnedNfts.scss";
 import { showErrorMessage, showSuccessMessage } from "../../utils/TriggerSnackbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare, faCircleInfo  } from "@fortawesome/free-solid-svg-icons";
 import { faEthereum } from "@fortawesome/free-brands-svg-icons/faEthereum";
 import Loader from "../loader/Loader";
 import PopUp from "../popup/PopUp";
 import ReList from "../actions/ReList";
 import SellNft from "../actions/SellNft";
 import SendNft from "../actions/SendNft";
+import Tooltip from "../tooltip/Tooltip";
 
 const OwnedNfts = (props) => {
 
@@ -37,12 +38,14 @@ const OwnedNfts = (props) => {
 
 
     useEffect(() => {
-        setTriggerLoader(true);
-        fetchOwnedNfts();
-        fetchListedItems();
-        setTriggerLoader(false);
+        if(!triggerLoader ){
+            setTriggerLoader(true);
+            fetchOwnedNfts();
+            fetchListedItems();
+            setTriggerLoader(false);
+        }
 
-    }, [triggerReload])
+    }, [triggerReload,triggerLoader])
 
     useEffect(() => {
         if (activeTab === "LI") {
@@ -51,7 +54,15 @@ const OwnedNfts = (props) => {
             setNftData(unlistedItems);
         }
 
-    }, [activeTab,nftData,triggerLoader])
+    }, [activeTab,nftData,triggerLoader,listedItems,unlistedItems])
+
+    provider.on("block", (blockNumber) => {
+        marketplaceContract.on("ItemCancelled", ({ tokenId }) => {
+            setTriggerLoader(false);
+            showSuccessMessage("Success!", "Your item was unlisted.");
+            refreshComponent();
+        })
+    })
 
 
     const refreshComponent = () => {
@@ -123,14 +134,6 @@ const OwnedNfts = (props) => {
             setTriggerLoader(false);
         }
 
-        provider.on("block", (blockNumber) => {
-            marketplaceContract.on("ItemCancelled", ({ tokenId }) => {
-                setTriggerLoader(false);
-                showSuccessMessage("Success!", "Your item was unlisted.");
-                refreshComponent();
-            })
-        })
-
     }
 
 
@@ -141,12 +144,18 @@ const OwnedNfts = (props) => {
                 <div className="title">
                     <h1>Your NFT's</h1>
                 </div>
-                <div className="listingPrice">
-                    {'Listing price is ' + props.listingPrice + " ether"}
-                </div>
-                {listedItems && unlistedItems && <div className="tabs">
+                {listedItems && unlistedItems && 
+                <div className="tabs-wrapper">
+                <div className="tabs">
                     <div className={activeTab === "UI" ? "tab active" : "tab"} onClick={() => { setActiveTab("UI") }}>{"Unlisted items (" + unlistedItems.length + ")"}</div>
                     <div className={activeTab === "LI" ? "tab active" : "tab"} onClick={() => { setActiveTab("LI") }}>{"Listed items (" + listedItems.length + ")"}</div>
+                </div>
+                <div className="listing-price">
+                    <div className="price-tooltip"> 
+                    <Tooltip content={<FontAwesomeIcon icon={faCircleInfo} size={"3x"}/>} text={"Listing price is " + props.listingPrice + " ether."}></Tooltip>
+                    </div>
+                   
+                </div>
                 </div>}
                 <div className="wrapper">
                     {nftData && (
@@ -166,8 +175,8 @@ const OwnedNfts = (props) => {
                                                 <div className="nft-actions">
                                                     {
                                                         activeTab === "UI" && <>
-                                                            <PopUp buttonLabel={'Sell NFT'} content={<SellNft tokenAddress={props.tokenAddress} triggerReload={refreshComponent}  startLoader={setTriggerLoader}  marketAddress={props.marketAddress} tokenId={nft.tokenId} name={nft.name} listingPrice={props.listingPrice}/>} />
-                                                            <PopUp buttonLabel={'Send NFT'} content={<SendNft tokenAddress={props.tokenAddress} triggerReload={refreshComponent}  startLoader={setTriggerLoader}  tokenId={nft.tokenId} />} />
+                                                            <PopUp isLoading={triggerLoader} buttonLabel={'Sell NFT'} content={<SellNft tokenAddress={props.tokenAddress} triggerReload={refreshComponent}  startLoader={setTriggerLoader}  marketAddress={props.marketAddress} tokenId={nft.tokenId} name={nft.name} listingPrice={props.listingPrice}/>} />
+                                                            <PopUp isLoading={triggerLoader} buttonLabel={'Send NFT'} content={<SendNft tokenAddress={props.tokenAddress} triggerReload={refreshComponent}  startLoader={setTriggerLoader}  tokenId={nft.tokenId} />} />
                                                         </>
                                                     }
                                                     {
@@ -178,7 +187,7 @@ const OwnedNfts = (props) => {
                                                                     <FontAwesomeIcon className="edit-icon" icon={faEthereum} />
                                                                 </div>
                                                                 <div >
-                                                                    <PopUp buttonLabel={<FontAwesomeIcon icon={faPenToSquare} />} content={<ReList tokenAddress={props.tokenAddress} marketAddress={props.marketAddress} triggerReload={refreshComponent}  startLoader={setTriggerLoader} name={nft.name} tokenId={nft.tokenId} itemId={nft.itemId}/>} />
+                                                                    <PopUp isLoading={triggerLoader} buttonLabel={<FontAwesomeIcon icon={faPenToSquare} />} content={<ReList tokenAddress={props.tokenAddress} marketAddress={props.marketAddress} triggerReload={refreshComponent}  startLoader={setTriggerLoader} name={nft.name} tokenId={nft.tokenId} itemId={nft.itemId}/>} />
                                                                 </div>
                                                             </div>
 
