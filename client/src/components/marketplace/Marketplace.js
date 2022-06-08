@@ -7,7 +7,7 @@ import MarketItem from './MarketItem';
 import Loader from '../loader/Loader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { showSuccessMessage } from '../../utils/TriggerSnackbar';
+import { showErrorMessage, showSuccessMessage } from '../../utils/TriggerSnackbar';
 
 function Marketplace(props) {
 
@@ -30,20 +30,20 @@ function Marketplace(props) {
   const signer = provider.getSigner();
 
   useEffect(() => {
+
     setTriggerLoader(true);
     fetchMarketItems();
     tokenContract.provider.polling = false;
-
-      tokenContract.on("Transfer", () => {
-        setTriggerLoader(false);
-        showSuccessMessage("Congratulations!", "Purchase successfuly executed");
-        setTriggerReload(!triggerReload);
-      })
+    marketplace.provider.polling = false;
 
   }, [triggerReload])
 
   useEffect(() => {
-
+    tokenContract.on("Transfer", () => {
+      setTriggerLoader(false);
+      showSuccessMessage("Congratulations!", "Purchase successfuly executed");
+      refreshComponent();
+    })
   }, [triggerLoader]);
 
   useEffect(() => {
@@ -61,6 +61,16 @@ function Marketplace(props) {
 
   const refreshComponent = () => {
     setTriggerReload(!triggerReload);
+  }
+
+  const onBuyClick = async (item) => {
+    try {
+      setTriggerLoader(true);
+      await marketplace.connect(signer).sellMarketItem(item.nftContract, item.itemId, { value: ethers.utils.parseEther(item.price) });
+    } catch (error) {
+      showErrorMessage("Something went wrong!", error.message);
+      setTriggerLoader(false);
+    }
   }
 
   const fetchMarketItems = async () => {
@@ -119,7 +129,7 @@ function Marketplace(props) {
           {
             filteredList &&
             filteredList.map((item) => {
-              return <MarketItem triggerReload={refreshComponent} startLoader={setTriggerLoader} item={item} marketPlace={marketplace} tokenContract={tokenContract} key={item.itemId} tokenAddress={props.tokenAddress} seller={item.seller} ></MarketItem>
+              return <MarketItem triggerReload={refreshComponent} startLoader={setTriggerLoader} item={item} key={item.itemId} tokenAddress={props.tokenAddress} seller={item.seller} buyItem={onBuyClick} ></MarketItem>
             })
           }
         </div>

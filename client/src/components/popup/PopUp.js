@@ -10,7 +10,8 @@ const PopUp = (props) => {
 
   useEffect(() => {
     function handleClickOutside(event) {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target) && open && props.isLoading) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target) && open && event.target.className !== "loaderWrapper-active") {
+        console.log(props.isLoading);
         setOpen(false);
       }
     }
@@ -24,9 +25,9 @@ const PopUp = (props) => {
 
 
   return (
-    <div className="popup" ref={wrapperRef}>
+    <div className="popup" >
 
-      <div>
+      <div ref={wrapperRef}>
         <button onClick={() => setOpen(!open)}> {props.buttonLabel} </button>
         {open && (
           <>

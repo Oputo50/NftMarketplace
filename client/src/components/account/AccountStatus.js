@@ -18,7 +18,7 @@ const AccountStatus = (props) => {
 
 
     return (
-        <div className='accountStatus'>
+        <div id='accountStatus' className='accountStatus'>
             <span>{connectedAcc}</span>
         </div>
     )

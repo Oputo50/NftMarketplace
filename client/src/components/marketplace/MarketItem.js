@@ -3,13 +3,11 @@ import React, { useEffect, useState } from 'react';
 import "./MarketItem.scss";
 import { faEthereum } from '@fortawesome/free-brands-svg-icons/faEthereum';
 import { ethers } from 'ethers';
-import { showErrorMessage, showSuccessMessage } from '../../utils/TriggerSnackbar';
+import {showSuccessMessage } from '../../utils/TriggerSnackbar';
 
 function MarketItem(props) {
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
-
-  const signer = provider.getSigner();
 
   const [userAccount, setUserAccount] = useState("");
 
@@ -23,14 +21,8 @@ function MarketItem(props) {
 
   }, [userAccount])
 
-  const onBuyClick = async () => {
-    try {
-      props.startLoader(true);
-      await props.marketPlace.connect(signer).sellMarketItem(props.tokenAddress, props.item.itemId, { value: ethers.utils.parseEther(props.item.price) });
-    } catch (error) {
-      showErrorMessage("Something went wrong!", error.message);
-      props.startLoader(false);
-    }
+  const onBuyClick = async (item) => {
+   await props.buyItem(item);
   }
 
   const copySellerToClipboard = (seller) => {
@@ -50,7 +42,7 @@ function MarketItem(props) {
           </div>
           <div className="market-item-actions">
             {
-              props.seller !== userAccount && <button onClick={onBuyClick}>Buy</button>
+              props.seller !== userAccount && <button onClick={() => onBuyClick(props.item)}>Buy</button>
             }
 
             <div className="market-item-info">

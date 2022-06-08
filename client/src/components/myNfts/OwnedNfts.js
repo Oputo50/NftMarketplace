@@ -36,6 +36,15 @@ const OwnedNfts = (props) => {
 
     const signer = provider.getSigner();
 
+    useEffect(() => {
+        marketplaceContract.provider.polliing = false;
+        tokenContract.provider.polling = false;
+        marketplaceContract.on("ItemCancelled", ({ tokenId }) => {
+            setTriggerLoader(false);
+            showSuccessMessage("Success!", "Your item was unlisted.");
+            refreshComponent();
+        })
+    })
 
     useEffect(() => {
         if(!triggerLoader ){
@@ -54,16 +63,7 @@ const OwnedNfts = (props) => {
             setNftData(unlistedItems);
         }
 
-    }, [activeTab,nftData,triggerLoader,listedItems,unlistedItems])
-
-    provider.on("block", (blockNumber) => {
-        marketplaceContract.on("ItemCancelled", ({ tokenId }) => {
-            setTriggerLoader(false);
-            showSuccessMessage("Success!", "Your item was unlisted.");
-            refreshComponent();
-        })
-    })
-
+    }, [activeTab,nftData,triggerLoader,listedItems,unlistedItems]) 
 
     const refreshComponent = () => {
         setTriggerReload(!triggerReload);

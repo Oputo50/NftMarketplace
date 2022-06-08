@@ -19,24 +19,22 @@ function SellNft(props) {
     const signer = provider.getSigner();
 
     useEffect(() => {
-
         marketplaceContract.provider.polling = false;
         myNftContract.provider.polling = false;
-        
-        myNftContract.on("Approval", async () => {
+
+        myNftContract.on("Approval", () => {
             showSuccessMessage("Success!", "Approved.");
             setIsApproved(true);
             props.startLoader(false);
         })
 
         marketplaceContract.on("MarketItemCreated", ({ tokenId }) => {
-            Array.from(document.getElementsByClassName("root")).forEach(
-                el => (el.click())
-            );
+            document.getElementById('accountStatus').click()
             props.startLoader(false);
             showSuccessMessage("Yay!", "You NFT was successfully listed!");
             props.triggerReload();
         })
+
     }, [isApproved]);
 
     const handlePriceChange = (event) => {
