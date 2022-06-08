@@ -30,20 +30,22 @@ function Marketplace(props) {
   const signer = provider.getSigner();
 
   useEffect(() => {
-
-    setTriggerLoader(true);
-    fetchMarketItems();
     tokenContract.provider.polling = false;
     marketplace.provider.polling = false;
 
-  }, [triggerReload])
-
-  useEffect(() => {
     tokenContract.on("Transfer", () => {
       setTriggerLoader(false);
       showSuccessMessage("Congratulations!", "Purchase successfuly executed");
       refreshComponent();
     })
+  },[])
+
+  useEffect(() => {
+    setTriggerLoader(true);
+    fetchMarketItems();
+  }, [triggerReload])
+
+  useEffect(() => {
   }, [triggerLoader]);
 
   useEffect(() => {
