@@ -1,9 +1,9 @@
-import React, {useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MyTokenContract from "../../contracts/MyToken.json";
 import "./Mint.scss"
 import axios from "axios";
 import { PinataKeys } from "../../utils/PinataKeys";
-import { ethers} from 'ethers';
+import { ethers } from 'ethers';
 import { showErrorMessage, showSuccessMessage } from '../../utils/TriggerSnackbar';
 import Loader from '../loader/Loader';
 
@@ -32,13 +32,8 @@ function Mint(props) {
         checkCanMint();
     }, [artistName, imageUrl, nftName, canMint])
 
-
-    const mintNft = async (nftHash, metadataHash) => {
-
-        setTriggerLoader(true);
-
-        try {
-            await myContract.connect(signer).mint(nftHash, metadataHash);
+    useEffect(() => {
+        provider.on("block", () => {
 
             myContract.on("tokenMint", (tokenId) => {
 
@@ -46,6 +41,15 @@ function Mint(props) {
                 reloadFields();
                 setTriggerLoader(false);
             })
+        })
+    }, [])
+
+    const mintNft = async (nftHash, metadataHash) => {
+
+        setTriggerLoader(true);
+
+        try {
+            await myContract.connect(signer).mint(nftHash, metadataHash);
 
         } catch (error) {
             showErrorMessage(error.message);
@@ -96,8 +100,8 @@ function Mint(props) {
 
         Array.from(document.querySelectorAll("input")).forEach(
             input => (input.value = "")
-          );
-       
+        );
+
     }
 
     const fileOnChange = (event) => {
@@ -110,7 +114,6 @@ function Mint(props) {
         setUploadedFile(file);
 
         reader.onloadend = () => {
-            console.log("reading file");
             setImageUrl(reader.result);
         }
 
@@ -155,6 +158,7 @@ function Mint(props) {
                 const metadataHash = "ipfs/" + response.data.IpfsHash;
 
                 mintNft(hash, metadataHash);
+
             }).catch(function (error) {
                 showErrorMessage(error.message);
             })
@@ -165,42 +169,42 @@ function Mint(props) {
 
     return (
         <>
-        <Loader isActive={triggerLoader} />
-        <div className="mint">
-            <div className="title">
-                <h1>Mint Your NFT</h1>
-            </div>
-            <div className="main">
-                <div className="wrapper">
-                    <div className="left">
-                        <div className="inputBox">
-                            <label className="boldFont">Type your NFT name</label>
-                            <input type="text" onKeyUp={handleNftNameOnChange} className="inputField"></input>
+            <Loader isActive={triggerLoader} />
+            <div className="mint">
+                <div className="title">
+                    <h1>Mint Your NFT</h1>
+                </div>
+                <div className="main">
+                    <div className="wrapper">
+                        <div className="left">
+                            <div className="inputBox">
+                                <label className="boldFont">Type your NFT name</label>
+                                <input type="text" onKeyUp={handleNftNameOnChange} className="inputField"></input>
+                            </div>
+
+
+                            <input id='uploadImage' type="file" onChange={fileOnChange} className="inputField imageInput"></input>
+
+                            <div className="inputBox">
+                                <label className="boldFont">Artist Name</label>
+                                <input type="text" onKeyUp={handleArtistNameOnChange} className="inputField"></input>
+                            </div>
                         </div>
 
-
-                        <input id='uploadImage' type="file" onChange={fileOnChange} className="inputField imageInput"></input>
-
-                        <div className="inputBox">
-                            <label className="boldFont">Artist Name</label>
-                            <input type="text" onKeyUp={handleArtistNameOnChange} className="inputField"></input>
+                        <div className="right">
+                            <div className="imageCtn" onClick={placeholderOnClick}>
+                                {imageUrl && <img alt='NFT' src={imageUrl} className="image"></img>}
+                                {imageUrl === '' && <div className="image"><h1>Please upload an image</h1></div>}
+                            </div>
                         </div>
                     </div>
 
-                    <div className="right">
-                        <div className="imageCtn" onClick={placeholderOnClick}>
-                            {imageUrl && <img alt='NFT'  src={imageUrl} className="image"></img>}
-                            {imageUrl === '' && <div className="image"><h1>Please upload an image</h1></div>}
-                        </div>
+                    <div className="button">
+                        <div onClick={canMint ? handleSubmit : undefined} className={canMint ? 'mintBtn' : "mintBtn-disabled"}><span>Mint</span></div>
                     </div>
                 </div>
 
-                <div className="button">
-                    <div onClick={canMint ? handleSubmit : undefined} className={canMint ? 'mintBtn' : "mintBtn-disabled"}><span>Mint</span></div>
-                </div>
             </div>
-
-        </div>
         </>
     )
 }

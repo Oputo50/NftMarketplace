@@ -11,11 +11,14 @@ import AccountStatus from "./components/account/AccountStatus";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import { showErrorMessage } from "./utils/TriggerSnackbar";
+import Addresses from "./utils/ContractAddresses.json";
 
 
 const App = () => {
-  const tokenAddress = "0x2996A553F2bedEce3a7009251Aacc89521b8A247";
-  const marketAddress = "0x63eD3670F09A62CBC5c7DDF98FAB09C84D4e936A";
+  const tokenAddress = Addresses.tokenAddress;
+
+  const marketAddress = Addresses.marketAddress;
+
   const [listingPrice, setListingPrice] = useState();
 
   const [isConnected, setIsConnected] = useState(false);
@@ -23,6 +26,12 @@ const App = () => {
   const [chainId, setChainId] = useState(0);
 
   const [isMmInstalled, setIsMmInstalled] = useState(false);
+
+  const [marketBalance, setMarketBalance] = useState(0);
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+  const marketplaceContract = new ethers.Contract(marketAddress, MarketplaceContract.abi, provider);
+  const signer = provider.getSigner();
 
   useEffect(() => {
 
@@ -33,44 +42,28 @@ const App = () => {
 
     if (isMmInstalled) {
       try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-        const marketplaceContract = new ethers.Contract(marketAddress, MarketplaceContract.abi, provider);
-        const signer = provider.getSigner();
+
         getCurrNetwork();
-
-        provider.listAccounts().then((accounts) => {
-
-          if (accounts.length === 0) {
-            setIsConnected(false)
-          } else {
-            setIsConnected(true);
-            marketplaceContract.connect(signer).getListingPrice().then((price) => {
-              price = ethers.utils.formatEther(price.toString());
-              setListingPrice(price);
-            })
-          }
-
-        })
+        checkAccounts();
+        getMarketBalance();
 
       } catch (error) {
         setIsConnected(false);
       }
     }
 
-  }, [isConnected,isMmInstalled,listingPrice])
+  }, [isConnected, isMmInstalled, listingPrice])
 
   useEffect(() => {
 
-    console.log("If you're seeing this log: Have a great day :D");
-
-  }, [chainId]);
+  }, [chainId, marketBalance]);
 
   try {
     window.ethereum.on('accountsChanged', function (accounts) {
       window.location.reload();
     })
 
-    window.ethereum.on('networkChanged', function(networkId){
+    window.ethereum.on('networkChanged', function (networkId) {
       window.location.reload();
     });
   } catch (error) {
@@ -88,6 +81,26 @@ const App = () => {
 
   }
 
+  const checkAccounts = async () => {
+    let accounts = await provider.listAccounts();
+
+    if (accounts.length === 0) {
+      setIsConnected(false)
+    } else {
+      setIsConnected(true);
+      let price = await marketplaceContract.connect(signer).getListingPrice();
+      price = ethers.utils.formatEther(price.toString());
+      setListingPrice(price);
+    }
+
+  }
+
+  const getMarketBalance = async () => {
+    let balance = await provider.getBalance(marketAddress);
+    balance = ethers.utils.formatEther(balance.toString());
+    setMarketBalance(balance);
+  }
+
 
   const connectOnClick = async () => {
     try {
@@ -96,7 +109,7 @@ const App = () => {
         setIsConnected(true);
       }
     } catch (error) {
-      showErrorMessage("",error.message);
+      showErrorMessage("", error.message);
     }
 
   }
@@ -110,7 +123,7 @@ const App = () => {
           {isConnected && <NavBar />}
           {isConnected && <AccountStatus isConnected={isConnected} />}
           <Routes>
-            <Route exact path="/" element={<Home isMmInstalled = {isMmInstalled} tokenAddress={tokenAddress} connectOnClick={connectOnClick} isConnected={isConnected} />} />
+            <Route exact path="/" element={<Home isMmInstalled={isMmInstalled} tokenAddress={tokenAddress} connectOnClick={connectOnClick} isConnected={isConnected} marketBalance={marketBalance} />} />
             <Route path="/mint" element={<Mint tokenAddress={tokenAddress} />} />
             <Route path="/myNfts" element={<OwnedNfts tokenAddress={tokenAddress} marketAddress={marketAddress} listingPrice={listingPrice} />} />
             <Route path="/marketplace" element={<Marketplace tokenAddress={tokenAddress} marketAddress={marketAddress} />} />

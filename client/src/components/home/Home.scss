@@ -2,11 +2,17 @@
     height: 100vh;
     width: 100%;
     display: grid;
+    grid-auto-rows: 150px;
 
 
     .title {
         text-align: center;
         height: 20px;
+    }
+
+    .balance{
+        height: 15px;
+        font-size: 20px;
     }
 
     .wrapper {

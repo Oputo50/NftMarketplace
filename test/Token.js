@@ -58,7 +58,7 @@ contract("Token", (accounts) => {
         const contractInstance = await Token.deployed();
         const token1 = {tokenId:1, hash: "hash1", metadata: "metadata" }
 
-        const metadata = await contractInstance.getNftText.call(token1.tokenId,{from:minter});
+        const metadata = await contractInstance.tokenURI.call(token1.tokenId,{from:minter});
 
         assert.equal(metadata,token1.metadata);
     })

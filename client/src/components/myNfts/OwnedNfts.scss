@@ -110,7 +110,7 @@
                             font-size: 14px;
 
                             .edit-price {
-                                display: flex;
+                                flex: 0.5;
                                 flex-direction: column;
                                 width: 50%;
                                 gap: 10px;
@@ -120,11 +120,17 @@
                                 }
                             }
 
+                            .cancel-listing{
+                                flex: 0.5;
+                                display: flex;
+                                justify-content: center;
+                            }
+
                             button {
                                 background-color: #7393B3;
                                 border-radius: 10px;
                                 transition: all 1s ease;
-                                width: fit-content;
+                                width: min-content;
                                 font-size: 1.25em;
                             }
 

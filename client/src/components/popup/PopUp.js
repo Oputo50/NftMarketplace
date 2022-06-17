@@ -3,10 +3,10 @@ import './PopUp.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
-
 const PopUp = (props) => {
   const wrapperRef = useRef(null);
-  const [open,setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [Child, setChild] = useState();
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -23,6 +23,11 @@ const PopUp = (props) => {
     };
   }, [open]);
 
+  useEffect(() => {
+
+    setChild(React.cloneElement(props.content, { openModal: setOpen }))
+
+  }, [props.content])
 
   return (
     <div className="popup" >
@@ -32,12 +37,11 @@ const PopUp = (props) => {
         {open && (
           <>
             <div className="popup-content">
-              <div className="exit">
-                <FontAwesomeIcon className="icon" onClick={() => setOpen(false)} icon={faTimes} size={"2x"}  />
+              <div id='exit' className="exit">
+                <FontAwesomeIcon className="icon" onClick={() => setOpen(false)} icon={faTimes} size={"2x"} />
               </div>
-              {props.content}
+              {Child}
             </div>
-
           </>
         )}
       </div>

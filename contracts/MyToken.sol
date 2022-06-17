@@ -105,7 +105,6 @@ contract MyToken is
      */
     function sendNft(address to, uint256 tokenId) public {
         require(ownerOf(tokenId) == msg.sender);
-        _beforeTokenTransfer(msg.sender, to, tokenId);
         transferFrom(msg.sender, to, tokenId);
         emit TokenSent(tokenId, msg.sender, to);
     }

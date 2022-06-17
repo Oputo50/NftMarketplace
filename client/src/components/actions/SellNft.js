@@ -21,19 +21,21 @@ function SellNft(props) {
     useEffect(() => {
         marketplaceContract.provider.polling = false;
         myNftContract.provider.polling = false;
-
-        myNftContract.on("Approval", () => {
-            showSuccessMessage("Success!", "Approved.");
-            setIsApproved(true);
-            props.startLoader(false);
+        provider.on("block",()=>{
+            myNftContract.on("Approval", () => {
+                showSuccessMessage("Success!", "Approved.");
+                setIsApproved(true);
+                props.startLoader(false);
+            })
+    
+            marketplaceContract.on("MarketItemCreated", ({ tokenId }) => {
+                props.openModal(false);
+                props.startLoader(false);
+                showSuccessMessage("Yay!", "You NFT was successfully listed!");
+                props.triggerReload();
+            })
         })
-
-        marketplaceContract.on("MarketItemCreated", ({ tokenId }) => {
-            document.getElementById('accountStatus').click()
-            props.startLoader(false);
-            showSuccessMessage("Yay!", "You NFT was successfully listed!");
-            props.triggerReload();
-        })
+      
 
     }, [isApproved]);
 
@@ -42,7 +44,7 @@ function SellNft(props) {
     }
 
     const approveToken = async () => {
-        props.startLoader(true);
+        props.startLoader(true,"Approving...");
         try {
             await myNftContract.connect(signer).approve(props.marketAddress, props.tokenId);
         } catch (error) {
@@ -50,15 +52,13 @@ function SellNft(props) {
             showErrorMessage(error.message);
         }
 
-        showWarningMessage("", "Approving...");
-
     }
 
     const sellNft = async () => {
 
 
         if (validatePrice()) {
-            props.startLoader(true);
+            props.startLoader(true,"Waiting for transaction...");
 
             if (isApproved) {
                 try {

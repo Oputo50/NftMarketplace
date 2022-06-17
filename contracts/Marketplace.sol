@@ -145,6 +145,7 @@ contract Marketplace is ReentrancyGuard, ERC721Holder{
         idToMarketItem[itemId].owner = payable(msg.sender);
         _itemsSold.increment();
         payable(owner).transfer(listingPrice);
+        emit ItemBuy(nftContract, tokenId, itemId);
     }
 
     /**

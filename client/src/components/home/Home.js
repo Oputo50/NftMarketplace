@@ -2,6 +2,7 @@ import React, {useEffect } from "react";
 import './Home.scss';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShop, faWallet, faHammer } from "@fortawesome/free-solid-svg-icons";
+import { faEthereum } from "@fortawesome/free-brands-svg-icons/faEthereum";
 import { Link } from "react-router-dom";
 
 const Home = (props) => {
@@ -19,7 +20,7 @@ const Home = (props) => {
             <h1>Welcome to NFT CREATOR!</h1>
           </div>
 
-
+          <div className="balance"><span> Marketplace balance: {props.marketBalance}</span> <FontAwesomeIcon icon={faEthereum}/></div>
           <div className="wrapper">
 
             <Link to={"/marketplace"} className="tab">

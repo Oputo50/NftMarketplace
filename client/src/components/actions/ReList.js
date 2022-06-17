@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "./Actions.scss";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEthereum } from '@fortawesome/free-brands-svg-icons/faEthereum';
@@ -12,13 +12,25 @@ function ReList(props) {
   const signer = provider.getSigner();
   const marketplaceContract = new ethers.Contract(props.marketAddress, Marketplace.abi, provider);
 
+  useEffect(() => {
+    marketplaceContract.provider.polling = false;
+    provider.on("block",() => {
+      marketplaceContract.on("ItemPriceChanged", () => {
+        props.openModal(false);
+        props.startLoader(false);
+        showSuccessMessage("Yay!", "The price of your NFT have been succefully changed.");
+        props.triggerReload();
+      })
+    })
+  }, [props])
+
   const handlePriceChange = (event) => {
     setPrice(event.target.value);
   }
 
   const changePrice = async () => {
     try {
-      props.startLoader(true);
+      props.startLoader(true,"Waiting for transaction...");
       await marketplaceContract.connect(signer).changeItemPrice(props.itemId, ethers.utils.parseEther(price));
     } catch (error) {
       showErrorMessage(error.message);
@@ -26,16 +38,6 @@ function ReList(props) {
     }
   }
 
-  provider.on("block", (blockNumber) => {
-    marketplaceContract.on("ItemPriceChanged", () => {
-      props.startLoader(false);
-      showSuccessMessage("Yay!", "The price of your NFT have been succefully changed.");
-      props.triggerReload();
-      Array.from(document.getElementsByClassName("root")).forEach(
-        el => (el.click())
-      );
-    })
-  })
 
 
   return (

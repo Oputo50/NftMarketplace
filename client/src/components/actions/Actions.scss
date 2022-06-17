@@ -5,6 +5,17 @@
     justify-content: center;
     text-align: center;
 
+    .address-input{  
+        width: -webkit-fill-available;
+    }
+
+    .address-input-validated{
+        border-style: solid;
+        border-color: #2db42d;
+        border-width: 3px;
+        width: -webkit-fill-available;
+    }
+
     p{
         font-size: 20px;
     }
