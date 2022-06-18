@@ -56,7 +56,6 @@ const OwnedNfts = (props) => {
             fetchListedItems();
             setTriggerLoader(false);
         }
-
     }, [triggerReload, triggerLoader])
 
     useEffect(() => {
@@ -65,8 +64,7 @@ const OwnedNfts = (props) => {
         } else {
             setNftData(unlistedItems);
         }
-
-    }, [activeTab, nftData, triggerLoader, listedItems, unlistedItems])
+    }, [activeTab, triggerLoader, listedItems, unlistedItems])
 
     const refreshComponent = () => {
         setTriggerReload(!triggerReload);
