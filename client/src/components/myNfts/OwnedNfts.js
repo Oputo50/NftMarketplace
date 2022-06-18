@@ -176,7 +176,8 @@ const OwnedNfts = (props) => {
                                                     <span>{nft.name}</span>
                                                 </div>
                                                 <div className="nft-image">
-                                                    <img alt="NFT" className="image" loading="lazy" src={"https://gateway.pinata.cloud/ipfs/" + nft.hash}></img>
+                                                    {nft.hash !== undefined && <img alt="NFT" className="image" loading="lazy" src={"https://gateway.pinata.cloud/ipfs/" + nft.hash}></img>}
+                                                    {nft.hash === undefined && <div className="eror-image"><span>Error fetching image.</span></div>}
                                                 </div>
                                                 <div className="nft-actions">
                                                     {

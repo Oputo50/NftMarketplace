@@ -30,6 +30,15 @@
                         height: 200px;
                         border: 2px solid rgba(0, 0, 0, 0.686);
                     }
+
+                    .error-image{
+                        width: 200px;
+                        height: 200px;
+                        border: 2px solid rgba(0, 0, 0, 0.686);
+                        span{
+                            color: #000000;
+                        }
+                    }
                 }
 
                 .market-item-actions{

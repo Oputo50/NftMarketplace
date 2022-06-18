@@ -9,7 +9,7 @@ import '@openzeppelin/contracts/security/ReentrancyGuard.sol';
 
 /// @title Marketplace
 /// @notice Simple ERC721 tokens Marketplace contract that let listing a token, cancel, change its price and buy it.
-/// @dev Pedro Cabral
+/// @dev Pedro
 contract Marketplace is ReentrancyGuard, ERC721Holder{
     using Counters for Counters.Counter;
     Counters.Counter private _itemIds;

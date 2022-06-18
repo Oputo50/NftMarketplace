@@ -169,7 +169,7 @@ function Mint(props) {
 
     return (
         <>
-            <Loader isActive={triggerLoader} />
+            <Loader isActive={triggerLoader} message={"Minting..."} />
             <div className="mint">
                 <div className="title">
                     <h1>Mint Your NFT</h1>

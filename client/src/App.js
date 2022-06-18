@@ -27,17 +27,17 @@ const App = () => {
 
   const [isMmInstalled, setIsMmInstalled] = useState(false);
 
-  const [marketBalance, setMarketBalance] = useState(0);
+  const [provider, setProvider] = useState();
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+  const [marketBalance, setMarketBalance] = useState(0);
   const marketplaceContract = new ethers.Contract(marketAddress, MarketplaceContract.abi, provider);
-  const signer = provider.getSigner();
 
   useEffect(() => {
 
 
     if (typeof window.ethereum !== 'undefined') {
       setIsMmInstalled(true);
+      setProvider(new ethers.providers.Web3Provider(window.ethereum, "any"));
     }
 
     if (isMmInstalled) {
@@ -71,18 +71,22 @@ const App = () => {
   }
 
   const getCurrNetwork = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-    let { chainId } = await provider.getNetwork();
-    setChainId(chainId);
+    if(provider !== undefined){
+      const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
 
-    if (chainId !== 5) {
-      showErrorMessage("Wrong network!", "Please make sure you are connected to Goerli network.");
+      let { chainId } = await provider.getNetwork();
+      setChainId(chainId);
+  
+      if (chainId !== 5) {
+        showErrorMessage("Wrong network!", "Please make sure you are connected to Goerli network.");
+      }
     }
 
   }
 
   const checkAccounts = async () => {
     let accounts = await provider.listAccounts();
+    const signer = provider.getSigner();
 
     if (accounts.length === 0) {
       setIsConnected(false)
@@ -96,9 +100,11 @@ const App = () => {
   }
 
   const getMarketBalance = async () => {
-    let balance = await provider.getBalance(marketAddress);
-    balance = ethers.utils.formatEther(balance.toString());
-    setMarketBalance(balance);
+    if(provider !== undefined){
+      let balance = await provider.getBalance(marketAddress);
+      balance = ethers.utils.formatEther(balance.toString());
+      setMarketBalance(balance);
+    }
   }
 
 
