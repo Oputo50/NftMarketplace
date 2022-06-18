@@ -10,7 +10,7 @@
     width: 701px;
     box-shadow: 0 2px 8px 0 #1a273d40;
     border: solid 1px #e0e7ff;
-    background-color: #ffffff;
+    background-color: lightgray;
     padding: 1rem 2rem;
     margin: 0 0.5rem;
     cursor: pointer;
@@ -37,6 +37,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    word-break: break-word;
   }
   
   .snackbar-info-container {
@@ -60,6 +61,11 @@
     background-repeat: no-repeat;
     background-position: center;
     margin-right: 1rem;
+  }
+
+  .exit-icon{
+    position: relative;
+    margin-bottom: 60px;
   }
   
   .error-snackbar-icon {
@@ -85,12 +91,12 @@
   
   #snackbar-fixed-container {
     position: fixed;
-    bottom: 80vh;
+    bottom: 70vh;
   }
   
   .rubik-text {
     font-family: "RubikMedium";
-    font-size: 15px;
+    font-size: 20px;
     font-weight: 500;
     color: #2e384d;
   }

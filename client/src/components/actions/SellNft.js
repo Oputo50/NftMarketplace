@@ -21,7 +21,7 @@ function SellNft(props) {
     useEffect(() => {
         marketplaceContract.provider.polling = false;
         myNftContract.provider.polling = false;
-        provider.on("block",()=>{
+       
             myNftContract.on("Approval", () => {
                 showSuccessMessage("Success!", "Approved.");
                 setIsApproved(true);
@@ -33,7 +33,7 @@ function SellNft(props) {
                 props.startLoader(false);
                 showSuccessMessage("Yay!", "You NFT was successfully listed!");
                 props.triggerReload();
-            })
+           
         })
       
 

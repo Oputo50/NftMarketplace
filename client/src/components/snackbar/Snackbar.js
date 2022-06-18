@@ -2,8 +2,9 @@ import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import "./Snackbar.css";
-import xIcon from "../../static/x.svg";
 import ReactDOM from "react-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 function Snackbar(props) {
     const [closeTimeout, setCloseTimeout] = useState(null);
@@ -40,8 +41,8 @@ function Snackbar(props) {
                         <h5 className="muted-rubik-text">  {props.message}</h5>
                     </div>
                 </div>
-                <div>
-                    <img src={xIcon} onClick={() => closeSnackBar()} alt="close icon" id="close-snackbar-icon" />
+                <div className='exit-icon'>
+                    <FontAwesomeIcon onClick={() => closeSnackBar()} icon={faTimes} size={"1x"} color={"black"} id="close-snackbar-icon" />
                 </div>
             </div>
         </div>
