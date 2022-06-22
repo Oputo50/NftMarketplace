@@ -144,7 +144,7 @@ const OwnedNfts = (props) => {
 
     return (
         <>
-            <Loader isActive={triggerLoader} message={loaderMessage}/>
+            <Loader isActive={triggerLoader} message={loaderMessage} />
             <div className="ownedNfts">
                 <div className="title">
                     <h1>Your NFT's</h1>
@@ -174,7 +174,10 @@ const OwnedNfts = (props) => {
                                                     <span>{nft.name}</span>
                                                 </div>
                                                 <div className="nft-image">
-                                                    {nft.hash !== undefined && <img alt="NFT" className="image" loading="lazy" src={"https://gateway.pinata.cloud/ipfs/" + nft.hash}></img>}
+                                                    {nft.hash !== undefined && <img alt="NFT" className="image" loading="lazy" src={"https://gateway.pinata.cloud/ipfs/" + nft.hash} onError={({ currentTarget }) => {
+                                                        currentTarget.onerror = null; // prevents looping
+                                                        currentTarget.src = "https://gateway.pinata.cloud/ipfs/QmTRN3uCaZAhDPpaL1Rudqar2JXH54ZmzypQoBogZMzfxM";
+                                                    }}></img>}
                                                     {nft.hash === undefined && <div className="eror-image"><span>Error fetching image.</span></div>}
                                                 </div>
                                                 <div className="nft-actions">
@@ -192,7 +195,7 @@ const OwnedNfts = (props) => {
                                                                     <span style={{ 'fontSize': '1.2em' }}>{nft.price}</span>
                                                                     <FontAwesomeIcon className="edit-icon" icon={faEthereum} />
                                                                 </div>
-                                                                <div style={{"marginTop":"10px"}} >
+                                                                <div style={{ "marginTop": "10px" }} >
                                                                     <PopUp isLoading={triggerLoader} buttonLabel={<FontAwesomeIcon icon={faPenToSquare} />} content={<ReList tokenAddress={props.tokenAddress} marketAddress={props.marketAddress} triggerReload={refreshComponent} startLoader={startLoader} name={nft.name} tokenId={nft.tokenId} itemId={nft.itemId} />} />
                                                                 </div>
                                                             </div>
