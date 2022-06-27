@@ -130,13 +130,12 @@ function Mint(props) {
 
         nftImage.append("file", file);
 
-
         axios.post(fileUrl, nftImage, {
             maxContentLength: "Infinity",
             headers: {
                 "Content-Type": `multipart/form-data; boundary=${nftImage._boundary}`,
-                pinata_api_key: PinataKeys[0].apiKey,
-                pinata_secret_api_key: PinataKeys[0].apiSecret,
+                pinata_api_key: process.env.REACT_APP_API_KEY,
+                pinata_secret_api_key: process.env.REACT_APP_API_SECRET,
             }
         }).then(function (response) {
 
@@ -150,8 +149,8 @@ function Mint(props) {
                 "createdBy": artistName
             }, {
                 headers: {
-                    pinata_api_key: PinataKeys[0].apiKey,
-                    pinata_secret_api_key: PinataKeys[0].apiSecret,
+                    pinata_api_key: process.env.REACT_APP_API_KEY,
+                    pinata_secret_api_key: process.env.REACT_APP_API_SECRET,
                 }
             }).then(function (response) {
 

@@ -30806,8 +30806,8 @@
         }
       },
       "links": {},
-      "address": "0xAbC5B635a0137175Dfe237548bbE0edd09e633B0",
-      "transactionHash": "0xee720bcbcad89dd4ee70999341bdcf43b3c30c0ad50a642a6ee90f9ac2d93d27"
+      "address": "0x0023A109e23369708b01c3c065448178EC8C1b44",
+      "transactionHash": "0x537242865fc82dc11b52ba8cdcffa8af6552204ad1b98c9547ee04514e7e6dea"
     },
     "5777": {
       "events": {
@@ -30945,12 +30945,12 @@
         }
       },
       "links": {},
-      "address": "0x1Ca715351e8F642d69d86E4b6eDeb3A78a9BAfA7",
-      "transactionHash": "0xb8bd344887e8f50de336fe2af62ce8809d8d9c061d3f68f375d9b0e828aa8435"
+      "address": "0xb36E37ca0D0be104489B2577f08934F5bb89E423",
+      "transactionHash": "0x5ef60a73d0d966fb7949be7dba90e823dbbe952ff4aa0703273edcfbb58f8363"
     }
   },
   "schemaVersion": "3.4.4",
-  "updatedAt": "2022-06-16T22:55:10.563Z",
+  "updatedAt": "2022-06-27T16:54:17.522Z",
   "networkType": "ethereum",
   "devdoc": {
     "details": "Pedro Cabral",

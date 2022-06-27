@@ -35,7 +35,7 @@ function Marketplace(props) {
     tokenContract.provider.polling = false;
     marketplace.provider.polling = false;
     provider.on("block",()=>{
-      tokenContract.on("Transfer", () => {
+      marketplace.on("ItemBuy", () => {
         setTriggerLoader(false);
         showSuccessMessage("Congratulations!", "Purchase successfuly executed");
         refreshComponent();

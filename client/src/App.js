@@ -15,6 +15,7 @@ import Addresses from "./utils/ContractAddresses.json";
 
 
 const App = () => {
+
   const tokenAddress = Addresses.tokenAddress;
 
   const marketAddress = Addresses.marketAddress;
