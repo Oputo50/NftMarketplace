@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import MyTokenContract from "../../contracts/MyToken.json";
 import "./Mint.scss"
 import axios from "axios";
-import { PinataKeys } from "../../utils/PinataKeys";
 import { ethers } from 'ethers';
 import { showErrorMessage, showSuccessMessage } from '../../utils/TriggerSnackbar';
 import Loader from '../loader/Loader';
