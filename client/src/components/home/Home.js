@@ -17,7 +17,7 @@ const Home = (props) => {
       {props.isConnected &&
         <div className="home">
           <div className="title">
-            <h1>Welcome to NFT CREATOR!</h1>
+            <h1>Welcome to Puto's NFT Marketplace!</h1>
           </div>
 
           <div className="balance"><span> Marketplace balance: {props.marketBalance}</span> <FontAwesomeIcon icon={faEthereum}/></div>

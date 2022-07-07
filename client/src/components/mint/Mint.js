@@ -23,8 +23,6 @@ function Mint(props) {
 
     const provider = new ethers.providers.Web3Provider(window.ethereum);
 
-    const signer = provider.getSigner();
-
     const myContract = new ethers.Contract(props.tokenAddress, MyTokenContract.abi, provider);
 
     useEffect(() => {
@@ -44,6 +42,8 @@ function Mint(props) {
     }, [])
 
     const mintNft = async (nftHash, metadataHash) => {
+
+        let signer = provider.getSigner();
 
         setTriggerLoader(true);
 

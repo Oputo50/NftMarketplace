@@ -51,7 +51,7 @@ function MarketItem(props) {
             <div className="market-item-info">
               <span>Seller: <span style={{ "fontSize": "15px", "cursor": "pointer" }} onClick={() => copySellerToClipboard(props.item.seller)}>{sellerAddress_toShow + "..."}</span></span>
               <div className="price">
-                <span>{"Price: " + props.item.price}</span>
+                <span>Price: <span style={{ "fontSize": "15px"}}>{props.item.price}</span></span>
                 <FontAwesomeIcon icon={faEthereum} className="icon" />
               </div>
             </div>

@@ -44,6 +44,7 @@
                 .market-item-actions{
                     display: flex;
                     justify-content: space-between;
+                    flex-direction: column-reverse;
                     margin-top: 15px;
 
                     button{
@@ -58,6 +59,7 @@
                         color: black;
                         font-size: 1.25em;
                         text-align: left;
+                        margin-bottom: 10px;
 
                         .icon{
                             margin-left: 5px;
